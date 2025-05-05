@@ -5,38 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>InfinityLabs - Math for All</title>
   <style>
-    /* Your CSS styles */
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f7f7f7;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      background-color: #800000;
-      color: white;
-      padding: 2rem 1rem;
+      font-family: Arial, sans-serif;
       text-align: center;
+      background-color: #D3D3D3; /* Light gray background */
+      color: #800000; /* Maroon text color */
+      padding: 2rem;
     }
 
     h1 {
       font-size: 3rem;
-      margin: 0;
+      color: #800000; /* Maroon for the title */
     }
 
     .subtitle {
       font-size: 1.3rem;
-      color: #FFD700;
-      margin-top: 0.5rem;
+      color: #444444; /* Dark gray for subtitles */
+      margin-bottom: 2rem;
     }
 
-    .content {
-      padding: 2rem;
-      text-align: center;
+    .card {
+      display: inline-block;
+      background: #FFFFFF; /* White cards for contrast */
+      border-left: 6px solid #FFD700; /* Gold accent */
+      padding: 1.5rem;
+      margin: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 300px;
     }
 
+    a {
+      color: #800000; /* Maroon for links */
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #FFD700; /* Gold hover effect for links */
+    }
+
+    /* Cool Button Styles */
     .btn {
       padding: 1rem 2rem;
       font-size: 1.2rem;
@@ -46,62 +54,42 @@
       cursor: pointer;
       border-radius: 8px;
       transition: background-color 0.2s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .btn:hover {
       background-color: #a00000;
+      transform: scale(1.05); /* Slightly enlarge on hover */
     }
 
-    #lessonsContent {
-      display: none;
-      margin-top: 2rem;
-      padding: 1rem;
-      background-color: #fffbe6;
-      border-radius: 8px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 1.5rem;
-      font-size: 0.9rem;
-      color: #999;
+    .btn:active {
+      transform: scale(1); /* Return to normal size when clicked */
     }
   </style>
   <script>
-    // Function to show the lessons content
-    function showLessons() {
-      document.getElementById("homePage").style.display = "none"; // Hide home page content
-      document.getElementById("lessonsContent").style.display = "block"; // Show lessons content
-    }
-
-    // Function to go back to the homepage
-    function goHome() {
-      document.getElementById("lessonsContent").style.display = "none"; // Hide lessons content
-      document.getElementById("homePage").style.display = "block"; // Show home page content
+    // Function to go to the lessons page
+    function goToLessons() {
+      window.location.href = "lessons.html"; // Redirect to lessons page
     }
   </script>
 </head>
 <body>
-  <div id="homePage">
-    <header>
-      <h1>InfinityLabs</h1>
-      <p class="subtitle">Exploring the Infinite Beauty of Math</p>
-    </header>
 
-    <div class="content">
-      <p>Welcome to InfinityLabs! Explore and improve your math skills.</p>
-      <button class="btn" onclick="showLessons()">Go to Math Lessons</button>
-    </div>
+  <h1>InfinityLabs</h1>
+  <p class="subtitle">Exploring the infinite beauty of math</p>
+
+  <div class="card">
+    <h2>Quick Facts</h2>
+    <p>Did you know? 0.999... = 1</p>
   </div>
 
-  <div id="lessonsContent">
-    <h1>Math Lessons</h1>
-    <p>Interactive lessons that teach you math step-by-step with help from AI experts.</p>
-    <button class="btn" onclick="goHome()">← Back to Home</button>
+  <div class="card">
+    <h2>Mini Challenge</h2>
+    <p>What’s the next prime number after 97?</p>
   </div>
 
-  <footer>
-    &copy; 2025 InfinityLabs. All rights reserved.
-  </footer>
+  <!-- Cool Button to Go to Lessons Page -->
+  <button class="btn" onclick="goToLessons()">Go to Math Lessons</button>
+
 </body>
 </html>
