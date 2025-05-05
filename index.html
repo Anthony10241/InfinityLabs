@@ -5,86 +5,163 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>InfinityLabs - Algebra Explorer</title>
   <style>
-    /* Full height background */
-    html, body {
+    /* Basic reset for margin and padding */
+    * {
       margin: 0;
       padding: 0;
-      height: 100%; /* Ensure background fills the whole page */
+      box-sizing: border-box;
+    }
+
+    /* Full height background and main layout */
+    html, body {
+      height: 100%;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: linear-gradient(to right, #800000, #f2f2f2); /* Strong maroon gradient to light gray */
-      color: #ffffff; /* White text for contrast on dark background */
-      padding: 2rem;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #800000, #f2f2f2); /* Maroon gradient */
+      color: #ffffff;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navigation Bar */
+    nav {
+      background-color: #333;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 1.2rem;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    /* Main Content Area */
+    main {
+      flex: 1;
+      padding: 3rem 1rem;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 10px;
+      margin-top: 2rem;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     h1 {
       font-size: 3rem;
-      color: #ffffff; /* White title text for visibility */
+      margin-bottom: 1rem;
+      color: #800000; /* Maroon text */
     }
 
     .subtitle {
-      font-size: 1.3rem;
-      color: #ffffff; /* White subtitle for consistency */
+      font-size: 1.5rem;
       margin-bottom: 2rem;
     }
 
+    /* Card Style */
+    .card-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 2rem;
+    }
+
     .card {
-      display: inline-block;
-      background: #FFFFFF;
-      border-left: 6px solid #FFD700;
-      padding: 1.5rem;
-      margin: 1rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      max-width: 300px;
-      text-align: left;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 250px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
     .card h2 {
-      margin-top: 0;
-      color: #800000; /* Maroon text for card titles */
+      color: #800000;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
     }
 
-    a.card-link {
+    .card p {
+      color: #333;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #333;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    footer a {
+      color: #ffd700;
       text-decoration: none;
-      color: inherit;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
 
-  <h1>InfinityLabs</h1>
-  <p class="subtitle">Master Algebra One Step at a Time</p>
+  <!-- Navigation Bar -->
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="lessons.html">Math Lessons</a>
+    <a href="#contact">Contact</a>
+  </nav>
 
-  <!-- Intro Cards -->
-  <div class="card">
-    <h2>Quick Facts</h2>
-    <p>Did you know? 0.999... = 1</p>
-  </div>
+  <!-- Main Content -->
+  <main>
+    <h1>Welcome to InfinityLabs</h1>
+    <p class="subtitle">Master Algebra One Step at a Time</p>
 
-  <div class="card">
-    <h2>Mini Challenge</h2>
-    <p>What’s the next prime number after 97?</p>
-  </div>
+    <div class="card-container">
+      <!-- Card 1: Quick Facts -->
+      <div class="card">
+        <h2>Quick Facts</h2>
+        <p>Did you know? 0.999... = 1</p>
+      </div>
 
-  <!-- Math Lessons Button -->
-  <a class="card-link" href="lessons.html">
-    <div class="card">
-      <h2>Math Lessons</h2>
-      <p>Explore units, practice problems, and algebra vocabulary.</p>
+      <!-- Card 2: Mini Challenge -->
+      <div class="card">
+        <h2>Mini Challenge</h2>
+        <p>What’s the next prime number after 97?</p>
+      </div>
+
+      <!-- Card 3: Math Lessons -->
+      <div class="card">
+        <a href="lessons.html">
+          <h2>Math Lessons</h2>
+          <p>Explore units, practice problems, and algebra vocabulary.</p>
+        </a>
+      </div>
     </div>
-  </a>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 InfinityLabs. All rights reserved.</p>
+    <p><a href="#contact">Contact Us</a></p>
+  </footer>
 
 </body>
 </html>
