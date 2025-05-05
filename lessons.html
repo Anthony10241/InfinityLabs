@@ -2,123 +2,91 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>InfinityLabs - Math Lessons</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InfinityLabs - Algebra Lessons</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f7f7f7;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      background-color: #800000;
-      color: white;
-      padding: 2rem 1rem;
+      font-family: Arial, sans-serif;
       text-align: center;
+      background-color: #D3D3D3;
+      color: #800000;
+      padding: 2rem;
     }
 
     h1 {
-      font-size: 3rem;
-      margin: 0;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
     }
 
     .subtitle {
-      font-size: 1.3rem;
-      color: #FFD700;
-      margin-top: 0.5rem;
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #444444;
     }
 
-    .lesson {
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      margin: 1rem 0;
-      padding: 1rem;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .card {
+      display: inline-block;
+      background: #FFFFFF;
+      border-left: 6px solid #FFD700;
+      padding: 1.5rem;
+      margin: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 320px;
+      text-align: left;
+      vertical-align: top;
     }
 
-    .lesson h3 {
+    .card h2 {
+      margin-top: 0;
       color: #800000;
     }
 
-    .content {
-      padding: 2rem;
-      text-align: center;
-    }
-
-    .btn {
-      padding: 1rem 2rem;
-      font-size: 1.2rem;
+    .back-link {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.8rem 1.5rem;
       background-color: #800000;
       color: white;
-      border: none;
-      cursor: pointer;
+      text-decoration: none;
       border-radius: 8px;
-      transition: background-color 0.2s;
     }
 
-    .btn:hover {
-      background-color: #a00000;
-    }
-
-    footer {
-      text-align: center;
-      padding: 1.5rem;
-      font-size: 0.9rem;
-      color: #999;
+    .back-link:hover {
+      background-color: #FFD700;
+      color: #800000;
     }
   </style>
-  <script>
-    // Function to go back to the homepage
-    function goHome() {
-      window.location.href = "index.html"; // Redirect to the homepage
-    }
-  </script>
 </head>
 <body>
+  <h1>Algebra Lessons</h1>
+  <p class="subtitle">Explore by Unit – Practice Problems & Vocabulary</p>
 
-  <header>
-    <h1>InfinityLabs Math Lessons</h1>
-    <p class="subtitle">Learn and Master Math, One Lesson at a Time</p>
-  </header>
-
-  <div class="content">
-    <button class="btn" onclick="goHome()">← Back to Home</button>
-    
-    <!-- Lesson 1 -->
-    <div class="lesson">
-      <h3>Lesson 1: Introduction to Addition</h3>
-      <p>In this lesson, we will learn about the basic concept of addition. Addition is one of the four basic operations of arithmetic.</p>
-      <p>Example: 5 + 3 = 8</p>
-    </div>
-
-    <!-- Lesson 2 -->
-    <div class="lesson">
-      <h3>Lesson 2: Introduction to Subtraction</h3>
-      <p>In this lesson, we will explore the concept of subtraction, which is the reverse of addition.</p>
-      <p>Example: 10 - 4 = 6</p>
-    </div>
-
-    <!-- Lesson 3 -->
-    <div class="lesson">
-      <h3>Lesson 3: Multiplication Basics</h3>
-      <p>This lesson will introduce you to multiplication, which is repeated addition. It's one of the key operations in arithmetic.</p>
-      <p>Example: 3 × 4 = 12</p>
-    </div>
-
-    <!-- Lesson 4 -->
-    <div class="lesson">
-      <h3>Lesson 4: Division Fundamentals</h3>
-      <p>In this lesson, we will cover division, which is the opposite of multiplication.</p>
-      <p>Example: 12 ÷ 4 = 3</p>
-    </div>
+  <div class="card">
+    <h2>Units 1 & 8: Linear Functions & Geometry</h2>
+    <p>Topics: linear graphs, slope-intercept form, point-slope form, arithmetic sequences, perpendicular lines, distance, midpoint.</p>
   </div>
 
-  <footer>
-    &copy; 2025 InfinityLabs. All rights reserved.
-  </footer>
+  <div class="card">
+    <h2>Units 2 & 3: Linear Inequalities & Radicals</h2>
+    <p>Topics: systems of linear inequalities, simplified radicals, rational and irrational numbers.</p>
+  </div>
+
+  <div class="card">
+    <h2>Unit 4: Quadratics</h2>
+    <p>Topics: solving quadratics, quadratic formula, vertex form, graphing quadratics.</p>
+  </div>
+
+  <div class="card">
+    <h2>Units 5 & 6: Exponentials</h2>
+    <p>Topics: geometric sequences, growth and decay, graphing exponentials, solving exponential equations.</p>
+  </div>
+
+  <div class="card">
+    <h2>Unit 7: Statistics</h2>
+    <p>Topics: mean, median, box plots, 5-number summary, outliers, spread, correlation, causation.</p>
+  </div>
+
+  <a class="back-link" href="index.html">← Back to Home</a>
 </body>
 </html>
