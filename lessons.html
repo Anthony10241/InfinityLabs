@@ -4,113 +4,104 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>InfinityLabs - Math Lessons</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Open+Sans:wght@400;600&family=Lora:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #D3D3D3; /* Light gray background */
-      color: #800000; /* Maroon text color */
-      padding: 2rem;
-    }
-
-    h1 {
-      font-size: 3rem;
-      color: #800000; /* Maroon for the title */
-    }
-
-    .subtitle {
-      font-size: 1.3rem;
-      color: #444444; /* Dark gray for subtitles */
-      margin-bottom: 2rem;
-    }
-
-    .lesson-card {
-      background-color: #fff;
-      padding: 1.5rem;
-      margin: 1rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      max-width: 300px;
-      display: inline-block;
-      border-left: 6px solid #FFD700; /* Gold accent */
-    }
-
-    .lesson-card h2 {
-      color: #800000; /* Maroon for card headings */
-    }
-
-    a {
-      color: #FFD700;
-      text-decoration: none;
-      border: 1px solid #FFD700; /* Thin outline around the buttons */
-      padding: 10px 20px;
-      border-radius: 5px;
-      display: inline-block;
-      margin: 10px;
-    }
-
-    a:hover {
-      color: #800000; /* Maroon text when hovered */
-      background-color: #FFD700; /* Gold background when hovered */
-      border-color: #800000; /* Maroon border when hovered */
+      font-family: 'Open Sans', sans-serif;
+      background-color: #D3D3D3;
+      color: #800000;
+      margin: 0;
+      padding: 0;
     }
 
     nav {
       background-color: #800000;
-      padding: 1rem;
-      text-align: center;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: flex-start;
+      gap: 20px;
     }
 
     nav a {
       color: #FFD700;
       text-decoration: none;
-      margin: 0 20px;
       font-size: 1.2rem;
+      font-family: 'Roboto', sans-serif;
     }
 
     nav a:hover {
       text-decoration: underline;
     }
+
+    header {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Lora', serif;
+      font-size: 2.5rem;
+    }
+
+    main {
+      padding: 2rem;
+    }
+
+    .unit {
+      background: #fff;
+      border-left: 6px solid #FFD700;
+      padding: 1.5rem;
+      margin: 1rem auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 700px;
+    }
+
+    .unit h2 {
+      font-family: 'Lora', serif;
+    }
+
+    .unit p {
+      font-family: 'Roboto', sans-serif;
+      font-size: 1rem;
+    }
   </style>
 </head>
 <body>
-  <!-- Navigation Bar -->
   <nav>
     <a href="index.html">Home</a>
-    <a href="#unit1">Unit 1</a>
-    <a href="#unit2">Unit 2</a>
-    <a href="#unit3">Unit 3</a>
-    <a href="#unit4">Unit 4</a>
-    <a href="#unit5">Unit 5</a>
-    <a href="#unit6">Unit 6</a>
-    <a href="#unit7">Unit 7</a>
+    <a href="lessons.html">Math Lessons</a>
   </nav>
 
-  <h1>Math Lessons - Algebra</h1>
-  <p class="subtitle">Explore and Learn Algebra Concepts</p>
+  <header>
+    <h1>Algebra Math Lessons</h1>
+  </header>
 
-  <div class="lesson-card" id="unit1">
-    <h2>Unit 1 & 8: Linear Functions & Geometry</h2>
-    <p>Learn about linear graphs, slope-intercept form, arithmetic sequences, perpendicular lines, distance, and midpoint.</p>
-  </div>
+  <main>
+    <div class="unit">
+      <h2>Units 1 & 8 – Linear Functions & Geometry</h2>
+      <p>Learn about linear graphs, slope-intercept form, point-slope form, arithmetic sequences, perpendicular lines, distance, and midpoint.</p>
+    </div>
 
-  <div class="lesson-card" id="unit2">
-    <h2>Unit 2 & 3: Linear Inequalities & Radicals</h2>
-    <p>Study systems of linear inequalities, solving inequalities, simplifying radicals, and rational vs. irrational numbers.</p>
-  </div>
+    <div class="unit">
+      <h2>Units 2 & 3 – Linear Inequalities & Radicals</h2>
+      <p>Explore systems of linear inequalities, simplified radicals, solutions, and how to identify rational and irrational numbers.</p>
+    </div>
 
-  <div class="lesson-card" id="unit3">
-    <h2>Unit 4: Quadratics</h2>
-    <p>Understand the quadratic formula, vertex form, solving quadratics, and graphing quadratics.</p>
-  </div>
+    <div class="unit">
+      <h2>Unit 4 – Quadratics</h2>
+      <p>Dive into solving quadratic equations, the quadratic formula, vertex form, and graphing parabolas.</p>
+    </div>
 
-  <div class="lesson-card" id="unit4">
-    <h2>Unit 5 & 6: Exponentials</h2>
-    <p>Explore geometric sequences, exponential growth and decay, and solving exponential equations.</p>
-  </div>
+    <div class="unit">
+      <h2>Units 5 & 6 – Exponentials</h2>
+      <p>Understand geometric sequences, modeling growth and decay, graphing exponential functions, and solving exponential equations.</p>
+    </div>
 
-  <div class="lesson-card" id="unit5">
-    <h2>Unit 7: Statistics</h2>
-    <p>Learn about mean, median, box plots, correlation, causation, and more.</p>
-  </div>
+    <div class="unit">
+      <h2>Unit 7 – Statistics</h2>
+      <p>Learn about mean, median, box plots, the 5-number summary, outliers, correlation, and causation.</p>
+    </div>
+  </main>
 </body>
 </html>
