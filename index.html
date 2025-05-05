@@ -2,44 +2,106 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Math Lessons - InfinityLabs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InfinityLabs - Math for All</title>
   <style>
+    /* Your CSS styles */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #fffbe6;
+      background-color: #f7f7f7;
       color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #800000;
+      color: white;
+      padding: 2rem 1rem;
       text-align: center;
-      padding: 2rem;
     }
 
     h1 {
-      color: #800000;
-      font-size: 2.5rem;
+      font-size: 3rem;
+      margin: 0;
     }
 
-    p {
+    .subtitle {
+      font-size: 1.3rem;
+      color: #FFD700;
+      margin-top: 0.5rem;
+    }
+
+    .content {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
       font-size: 1.2rem;
-      margin: 1rem auto 2rem;
-      max-width: 600px;
-    }
-
-    a {
-      display: inline-block;
-      padding: 0.5rem 1rem;
       background-color: #800000;
       color: white;
-      text-decoration: none;
-      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.2s;
     }
 
-    a:hover {
+    .btn:hover {
       background-color: #a00000;
     }
+
+    #lessonsContent {
+      display: none;
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #fffbe6;
+      border-radius: 8px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+      color: #999;
+    }
   </style>
+  <script>
+    // Function to show the lessons content
+    function showLessons() {
+      document.getElementById("homePage").style.display = "none"; // Hide home page content
+      document.getElementById("lessonsContent").style.display = "block"; // Show lessons content
+    }
+
+    // Function to go back to the homepage
+    function goHome() {
+      document.getElementById("lessonsContent").style.display = "none"; // Hide lessons content
+      document.getElementById("homePage").style.display = "block"; // Show home page content
+    }
+  </script>
 </head>
 <body>
-  <h1>Welcome to Math Lessons</h1>
-  <p>Learn math step by step with helpful examples and interactive content. More coming soon!</p>
-  <a href="index.html">← Back to Home</a>
+  <div id="homePage">
+    <header>
+      <h1>InfinityLabs</h1>
+      <p class="subtitle">Exploring the Infinite Beauty of Math</p>
+    </header>
+
+    <div class="content">
+      <p>Welcome to InfinityLabs! Explore and improve your math skills.</p>
+      <button class="btn" onclick="showLessons()">Go to Math Lessons</button>
+    </div>
+  </div>
+
+  <div id="lessonsContent">
+    <h1>Math Lessons</h1>
+    <p>Interactive lessons that teach you math step-by-step with help from AI experts.</p>
+    <button class="btn" onclick="goHome()">← Back to Home</button>
+  </div>
+
+  <footer>
+    &copy; 2025 InfinityLabs. All rights reserved.
+  </footer>
 </body>
 </html>
