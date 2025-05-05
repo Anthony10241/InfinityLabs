@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>InfinityLabs - Algebra Lessons</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InfinityLabs - Algebra Explorer</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,14 +14,14 @@
     }
 
     h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+      font-size: 3rem;
+      color: #800000;
     }
 
     .subtitle {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
+      font-size: 1.3rem;
       color: #444444;
+      margin-bottom: 2rem;
     }
 
     .card {
@@ -32,9 +32,15 @@
       margin: 1rem;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      max-width: 320px;
+      max-width: 300px;
       text-align: left;
-      vertical-align: top;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
 
     .card h2 {
@@ -42,51 +48,35 @@
       color: #800000;
     }
 
-    .back-link {
-      display: inline-block;
-      margin-top: 2rem;
-      padding: 0.8rem 1.5rem;
-      background-color: #800000;
-      color: white;
+    a.card-link {
       text-decoration: none;
-      border-radius: 8px;
-    }
-
-    .back-link:hover {
-      background-color: #FFD700;
-      color: #800000;
+      color: inherit;
     }
   </style>
 </head>
 <body>
-  <h1>Algebra Lessons</h1>
-  <p class="subtitle">Explore by Unit – Practice Problems & Vocabulary</p>
 
+  <h1>InfinityLabs</h1>
+  <p class="subtitle">Master Algebra One Step at a Time</p>
+
+  <!-- Intro Cards -->
   <div class="card">
-    <h2>Units 1 & 8: Linear Functions & Geometry</h2>
-    <p>Topics: linear graphs, slope-intercept form, point-slope form, arithmetic sequences, perpendicular lines, distance, midpoint.</p>
+    <h2>Quick Facts</h2>
+    <p>Did you know? 0.999... = 1</p>
   </div>
 
   <div class="card">
-    <h2>Units 2 & 3: Linear Inequalities & Radicals</h2>
-    <p>Topics: systems of linear inequalities, simplified radicals, rational and irrational numbers.</p>
+    <h2>Mini Challenge</h2>
+    <p>What’s the next prime number after 97?</p>
   </div>
 
-  <div class="card">
-    <h2>Unit 4: Quadratics</h2>
-    <p>Topics: solving quadratics, quadratic formula, vertex form, graphing quadratics.</p>
-  </div>
+  <!-- Math Lessons Button -->
+  <a class="card-link" href="lessons.html">
+    <div class="card">
+      <h2>Math Lessons</h2>
+      <p>Explore units, practice problems, and algebra vocabulary.</p>
+    </div>
+  </a>
 
-  <div class="card">
-    <h2>Units 5 & 6: Exponentials</h2>
-    <p>Topics: geometric sequences, growth and decay, graphing exponentials, solving exponential equations.</p>
-  </div>
-
-  <div class="card">
-    <h2>Unit 7: Statistics</h2>
-    <p>Topics: mean, median, box plots, 5-number summary, outliers, spread, correlation, causation.</p>
-  </div>
-
-  <a class="back-link" href="index.html">← Back to Home</a>
 </body>
 </html>
