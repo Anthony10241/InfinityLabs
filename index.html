@@ -20,7 +20,7 @@
       gap: 20px;
     }
 
-    nav a {
+    a {
       color: #FFD700;
       text-decoration: none;
       font-size: 1.1rem;
@@ -30,7 +30,7 @@
       transition: 0.3s;
     }
 
-    nav a:hover {
+    a:hover {
       border-color: #FFD700;
       background-color: #FFD70010;
     }
@@ -66,23 +66,8 @@
       max-width: 400px;
     }
 
-    .button-link {
-      display: inline-block;
-      margin: 2rem auto;
-      padding: 10px 20px;
-      font-size: 1rem;
-      color: #800000;
-      border: 2px solid #800000;
-      border-radius: 5px;
-      background-color: transparent;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-
-    .button-link:hover {
-      background-color: #800000;
-      color: #FFD700;
-      border-color: #FFD700;
+    .nav-button-wrapper {
+      margin-top: 2rem;
     }
   </style>
 </head>
@@ -108,7 +93,9 @@
       <p>Practice key algebra vocabulary with interactive tools and support.</p>
     </div>
 
-    <a href="lessons.html" class="button-link">Go to Math Lessons</a>
+    <div class="nav-button-wrapper">
+      <a href="lessons.html">Go to Math Lessons</a>
+    </div>
   </main>
 </body>
 </html>
