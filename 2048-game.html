@@ -21,35 +21,37 @@
 
     #game {
       position: relative;
-      width: 320px;
-      height: 320px;
+      width: 332px; /* 4 * 75px + 3 * 6px gap */
+      height: 332px;
       background: #bbada0;
       border-radius: 10px;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(4, 1fr);
-      gap: 10px;
-      padding: 10px;
+      grid-template-columns: repeat(4, 75px);
+      grid-template-rows: repeat(4, 75px);
+      gap: 6px;
+      padding: 6px;
+      box-sizing: border-box;
     }
 
-    .cell, .tile {
-      width: 70px;
-      height: 70px;
+    .cell {
+      background: #ccc0b3;
+      border-radius: 5px;
+      width: 75px;
+      height: 75px;
+    }
+
+    .tile {
+      position: absolute;
+      width: 75px;
+      height: 75px;
+      line-height: 75px;
       display: flex;
       justify-content: center;
       align-items: center;
       font-size: 24px;
       font-weight: bold;
       border-radius: 5px;
-    }
-
-    .cell {
-      background: #ccc0b3;
-    }
-
-    .tile {
-      position: absolute;
-      background: #eee4da;
+      color: #333;
       transition: transform 0.2s ease;
     }
 
@@ -64,7 +66,6 @@
     .tile[data-value="8"]   { background: #eee1c9; }
     .tile[data-value="4"]   { background: #ede0c8; }
     .tile[data-value="2"]   { background: #eee4da; }
-
   </style>
 </head>
 <body>
@@ -74,31 +75,27 @@
   <script>
     const game = document.getElementById('game');
     const size = 4;
+    const cellSize = 75 + 6; // width + gap
     let grid = Array(size).fill().map(() => Array(size).fill(0));
     let tiles = [];
-
-    const getPosition = (x, y) => ({
-      transform: `translate(${x * 80}px, ${y * 80}px)`
-    });
 
     function drawBoard() {
       game.innerHTML = '';
 
-      // Add empty cells
+      // Draw static cells
       for (let i = 0; i < size * size; i++) {
         const cell = document.createElement('div');
         cell.className = 'cell';
         game.appendChild(cell);
       }
 
-      // Add tiles
+      // Draw animated tiles
       tiles.forEach(t => {
         const tile = document.createElement('div');
         tile.className = 'tile';
         tile.textContent = t.value;
-        tile.style = getPosition(t.x, t.y).transform;
-        tile.style.transform = `translate(${t.x * 80}px, ${t.y * 80}px)`;
         tile.dataset.value = t.value;
+        tile.style.transform = `translate(${t.x * cellSize}px, ${t.y * cellSize}px)`;
         game.appendChild(tile);
       });
     }
@@ -121,9 +118,8 @@
       let moved = false;
       let merged = [];
 
-      let order = Array.from({ length: size }, (_, i) => i);
-      if (dx > 0) order = order.reverse();
-      if (dy > 0) order = order.reverse();
+      let order = [...Array(size).keys()];
+      if (dx > 0 || dy > 0) order = order.reverse();
 
       for (let y of order) {
         for (let x of order) {
