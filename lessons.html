@@ -20,14 +20,21 @@
       gap: 20px;
     }
 
-    nav a {
-      color: #FFD700;
+    .nav-button {
+      color: #800000;
+      background-color: #FFD700;
       text-decoration: none;
       font-size: 1.1rem;
+      border: 2px solid #FFD700;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: 0.3s;
     }
 
-    nav a:hover {
-      text-decoration: underline;
+    .nav-button:hover {
+      background-color: #800000;
+      color: #FFD700;
+      border-color: #800000;
     }
 
     header {
@@ -73,8 +80,8 @@
 </head>
 <body>
   <nav>
-    <a href="index.html">Home</a>
-    <a href="lessons.html">Math Lessons</a>
+    <a href="index.html" class="nav-button">Home</a>
+    <a href="lessons.html" class="nav-button">Math Lessons</a>
   </nav>
 
   <header>
