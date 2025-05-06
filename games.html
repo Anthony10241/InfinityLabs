@@ -132,11 +132,171 @@
         <a href="equation-solver.html" class="nav-button">Start Solving</a>
       </div>
 
-      <div class="card">
-        <h2>Math Shooter</h2>
-        <p>Shoot the correct answers to solve math problems and boost your score!</p>
-        <a href="math-shooter.html" class="nav-button">Play Shooter</a>
-      </div>
+     <div class="game-box">
+  <h1>🎯 Math Shooting Game</h1>
+  <div class="question" id="question">Get Ready...</div>
+  <div class="choices" id="choices"></div>
+  <div class="feedback" id="feedback"></div>
+  <div class="score">Score: <span id="score">0</span></div>
+  <div class="lives">Lives: <span id="lives">3</span></div>
+  <div class="timer">Time: <span id="time">10</span>s</div>
+  <div class="game-over" id="gameOver"></div>
+  <button onclick="startGame()">🔁 Restart Game</button>
+</div>
+
+<!-- Sounds (Replace with your own files if needed) -->
+<audio id="correctSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+<audio id="wrongSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+<audio id="gameOverSound" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"></audio>
+
+<script>
+  let score = 0;
+  let lives = 3;
+  let timeLeft = 10;
+  let timer;
+  let correctAnswer;
+  let difficulty = 1;
+
+  function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function updateDifficulty() {
+    if (score >= 10) difficulty = 3;
+    else if (score >= 5) difficulty = 2;
+  }
+
+  function generateProblem() {
+    updateDifficulty();
+
+    let a, b, operator;
+    const operators = ['+', '-', '*'];
+    operator = operators[getRandomInt(0, operators.length - 1)];
+
+    switch (difficulty) {
+      case 1:
+        a = getRandomInt(1, 10);
+        b = getRandomInt(1, 10);
+        break;
+      case 2:
+        a = getRandomInt(10, 20);
+        b = getRandomInt(5, 15);
+        break;
+      case 3:
+        a = getRandomInt(10, 30);
+        b = getRandomInt(10, 30);
+        break;
+    }
+
+    let question;
+    switch (operator) {
+      case '+': correctAnswer = a + b; question = `${a} + ${b}`; break;
+      case '-': correctAnswer = a - b; question = `${a} - ${b}`; break;
+      case '*': correctAnswer = a * b; question = `${a} × ${b}`; break;
+    }
+
+    return { question, correctAnswer };
+  }
+
+  function renderQuestion() {
+    clearInterval(timer);
+    timeLeft = 10;
+    document.getElementById('time').textContent = timeLeft;
+    timer = setInterval(() => {
+      timeLeft--;
+      document.getElementById('time').textContent = timeLeft;
+      if (timeLeft <= 0) {
+        handleWrong();
+      }
+    }, 1000);
+
+    const { question, correctAnswer } = generateProblem();
+    document.getElementById('question').textContent = question;
+    const choicesEl = document.getElementById('choices');
+    choicesEl.innerHTML = '';
+
+    let answers = [correctAnswer];
+    while (answers.length < 4) {
+      let fake = correctAnswer + getRandomInt(-10, 10);
+      if (!answers.includes(fake)) answers.push(fake);
+    }
+
+    answers = answers.sort(() => Math.random() - 0.5);
+
+    answers.forEach(answer => {
+      const btn = document.createElement('div');
+      btn.className = 'choice';
+      btn.textContent = answer;
+      btn.onclick = () => handleAnswer(answer === correctAnswer);
+      choicesEl.appendChild(btn);
+    });
+  }
+
+  function handleAnswer(isCorrect) {
+    clearInterval(timer);
+    const feedback = document.getElementById('feedback');
+    const correctSound = document.getElementById('correctSound');
+    const wrongSound = document.getElementById('wrongSound');
+
+    if (isCorrect) {
+      score++;
+      feedback.textContent = "✅ Correct!";
+      correctSound.play();
+    } else {
+      handleWrong();
+      return;
+    }
+
+    document.getElementById('score').textContent = score;
+    setTimeout(() => {
+      feedback.textContent = '';
+      renderQuestion();
+    }, 1000);
+  }
+
+  function handleWrong() {
+    clearInterval(timer);
+    const feedback = document.getElementById('feedback');
+    const wrongSound = document.getElementById('wrongSound');
+    lives--;
+
+    feedback.textContent = `❌ Wrong! Answer was ${correctAnswer}`;
+    document.getElementById('lives').textContent = lives;
+    wrongSound.play();
+
+    if (lives <= 0) {
+      endGame();
+    } else {
+      setTimeout(() => {
+        feedback.textContent = '';
+        renderQuestion();
+      }, 1000);
+    }
+  }
+
+  function endGame() {
+    clearInterval(timer);
+    const gameOverSound = document.getElementById('gameOverSound');
+    document.getElementById('gameOver').textContent = `💀 Game Over! Final Score: ${score}`;
+    gameOverSound.play();
+    document.getElementById('choices').innerHTML = '';
+    document.getElementById('question').textContent = 'Game Over!';
+  }
+
+  function startGame() {
+    score = 0;
+    lives = 3;
+    difficulty = 1;
+    document.getElementById('score').textContent = score;
+    document.getElementById('lives').textContent = lives;
+    document.getElementById('gameOver').textContent = '';
+    renderQuestion();
+  }
+
+  // Auto-start the game
+  startGame();
+</script>
+
     </div>
   </main>
 </body>
