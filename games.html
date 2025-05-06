@@ -1,1 +1,140 @@
-eddie this is the games put the code in this
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Math Games - InfinityLabs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Lora:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to bottom right, #f0f0f0, #d3d3d3);
+      color: #800000;
+      margin: 0;
+    }
+
+    nav {
+      background-color: #800000;
+      padding: 1rem 2rem;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      color: #FFD700;
+      text-decoration: none;
+      font-size: 1.1rem;
+      border: 2px solid transparent;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      border-color: #FFD700;
+      background-color: #FFD70010;
+    }
+
+    header {
+      text-align: center;
+      padding: 3rem 1rem 1rem;
+    }
+
+    h1 {
+      font-family: 'Lora', serif;
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.3rem;
+      color: #444444;
+    }
+
+    main {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border-left: 6px solid #FFD700;
+      padding: 1.5rem;
+      margin: 1rem auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .nav-button {
+      color: #800000;
+      background-color: #FFD700;
+      text-decoration: none;
+      font-size: 1.1rem;
+      border: 2px solid #FFD700;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: 0.3s;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+
+    .nav-button:hover {
+      background-color: #800000;
+      color: #FFD700;
+      border-color: #800000;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+    }
+
+    @media only screen and (min-width:320px) {
+      .container {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-button">Home</a>
+    <a href="lessons.html" class="nav-button">Math Lessons</a>
+    <a href="math-vocab.html" class="nav-button" target="_blank">Math Vocabulary</a>
+  </nav>
+
+  <header>
+    <h1>Math Games</h1>
+    <p class="subtitle">Engage with interactive games to improve your math skills!</p>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="card">
+        <h2>2048 Math Game</h2>
+        <p>Play a modified version of the 2048 game, with math challenges at every move!</p>
+        <a href="2048-game.html" class="nav-button">Play Now</a>
+      </div>
+
+      <div class="card">
+        <h2>Equation Solver</h2>
+        <p>Solve different types of equations and improve your problem-solving skills.</p>
+        <a href="equation-solver.html" class="nav-button">Start Solving</a>
+      </div>
+
+      <div class="card">
+        <h2>Math Quiz</h2>
+        <p>Test your knowledge with quizzes based on the lessons you've learned.</p>
+        <a href="math-quiz.html" class="nav-button">Take the Quiz</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
