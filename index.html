@@ -66,26 +66,24 @@
       max-width: 400px;
     }
 
-    .nav-button-wrapper {
-      margin-top: 2rem;
-    }
-
     /* Unified Button Style */
     .nav-button {
-      color: #800000; /* Maroon text color */
-      background-color: #FFD700; /* Yellow background */
+      color: #800000;
+      background-color: #FFD700;
       text-decoration: none;
       font-size: 1.1rem;
-      border: 2px solid #FFD700; /* Yellow border */
+      border: 2px solid #FFD700;
       padding: 8px 16px;
       border-radius: 8px;
       transition: 0.3s;
+      display: inline-block;
+      margin-top: 1rem;
     }
 
     .nav-button:hover {
-      background-color: #800000; /* Maroon background */
-      color: #FFD700; /* Yellow text */
-      border-color: #800000; /* Maroon border */
+      background-color: #800000;
+      color: #FFD700;
+      border-color: #800000;
     }
   </style>
 </head>
@@ -102,6 +100,12 @@
 
   <main>
     <div class="card">
+      <h2>Math Lessons</h2>
+      <p>Engaging step-by-step lessons that build your math confidence.</p>
+      <a href="lessons.html" class="nav-button">Start Learning</a>
+    </div>
+
+    <div class="card">
       <h2>Get to Play Math Games</h2>
       <p>Complete lessons to unlock fun math games and test your skills!</p>
     </div>
@@ -109,10 +113,6 @@
     <div class="card">
       <h2>Math Vocabulary</h2>
       <p>Practice key algebra vocabulary with interactive tools and support.</p>
-    </div>
-
-    <div class="nav-button-wrapper">
-      <a href="lessons.html" class="nav-button">Go to Math Lessons</a>
     </div>
   </main>
 </body>
