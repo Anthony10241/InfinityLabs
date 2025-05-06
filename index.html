@@ -89,6 +89,11 @@
       color: #FFD700;
       border-color: #800000;
     }
+
+    .container {
+      display: flex;
+      flex-direction: horizontal;
+    }
   </style>
 </head>
 <body>
@@ -104,7 +109,8 @@
   </header>
 
   <main>
-    <div class="card">
+    <div class="container">
+      <div class="card">
       <h2>Math Lessons</h2>
       <p>Engaging step-by-step lessons that build your math confidence.</p>
       <a href="lessons.html" class="nav-button">Start Learning</a>
@@ -119,6 +125,7 @@
       <h2>Math Vocabulary</h2>
       <p>Practice key algebra vocabulary with interactive tools and support.</p>
       <a href="math-vocab.html" target="_blank" class="nav-button">Explore Vocabulary</a>
+    </div>
     </div>
   </main>
 </body>
