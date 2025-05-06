@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>2048 Math Game</title>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #f8f8f8;
+      margin: 0;
+    }
+
+    h1 {
+      margin-top: 2rem;
+      color: #800000;
+    }
+
+    #game-board {
+      display: grid;
+      grid-template-columns: repeat(4, 100px);
+      grid-gap: 10px;
+      margin-top: 2rem;
+      background-color: #bbada0;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .tile {
+      width: 100px;
+      height: 100px;
+      background-color: #eee4da;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: transform 0.2s ease;
+    }
+
+    .tile-2048 { background-color: #edc22e; }
+    .tile-1024 { background-color: #f2b179; }
+    .tile-512  { background-color: #f59563; }
+  </style>
+</head>
+<body>
+  <h1>2048 Math Game</h1>
+  <div id="game-board"></div>
+
+  <script>
+    const board = document.getElementById('game-board');
+    let grid = Array(4).fill(null).map(() => Array(4).fill(0));
+
+    function createTile(value) {
+      const div = document.createElement('div');
+      div.className = `tile tile-${value}`;
+      div.textContent = value;
+      return div;
+    }
+
+    function drawBoard() {
+      board.innerHTML = '';
+      for (let row of grid) {
+        for (let cell of row) {
+          board.appendChild(cell ? createTile(cell) : createTile(''));
+        }
+      }
+    }
+
+    function spawnRandomTile() {
+      const emptyCells = [];
+      for (let r = 0; r < 4; r++) {
+        for (let c = 0; c < 4; c++) {
+          if (grid[r][c] === 0) emptyCells.push([r, c]);
+        }
+      }
+      if (emptyCells.length === 0) return;
+
+      const [r, c] = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+      grid[r][c] = [2048, 1024, 512][Math.floor(Math.random() * 3)];
+    }
+
+    function setupGame() {
+      grid = Array(4).fill(null).map(() => Array(4).fill(0));
+      spawnRandomTile();
+      spawnRandomTile();
+      drawBoard();
+    }
+
+    window.addEventListener('keydown', e => {
+      // Movement handling placeholder
+      // You can add key controls here (e.g., slide left, right, up, down)
+      console.log(`Key pressed: ${e.key}`);
+    });
+
+    setupGame();
+  </script>
+</body>
+</html>
