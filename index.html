@@ -94,13 +94,20 @@
       display: flex;
       flex-direction: horizontal;
     }
+
+    @media only screen and (max-width:320px) {
+      .container {
+        display: flex;
+        flex-direction: vertical;
+      }
+    }
   </style>
 </head>
 <body>
   <nav>
     <a href="index.html" class="nav-button">Home</a>
     <a href="lessons.html" class="nav-button">Math Lessons</a>
-    <a href="Mathvocab.html" class="nav-button" target="_blank">Math Vocabulary</a>
+    <a href="math-vocab.html" class="nav-button" target="_blank">Math Vocabulary</a>
   </nav>
 
   <header>
