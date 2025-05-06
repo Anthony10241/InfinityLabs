@@ -29,6 +29,7 @@
       position: relative;
       height: 500px;
       width: 100%;
+      overflow: hidden;
     }
 
     .shooter {
@@ -50,7 +51,7 @@
       display: none;
     }
 
-    .choices div {
+    .choice {
       padding: 10px 20px;
       background-color: #FF6B6B;
       margin: 5px;
@@ -58,6 +59,7 @@
       border-radius: 5px;
       font-size: 1.2rem;
       position: absolute;
+      display: inline-block;
     }
 
     .score, .lives, .timer {
@@ -102,8 +104,7 @@
     let bullet = document.getElementById('bullet');
     let gameBox = document.getElementById('gameBox');
     let bulletInterval;
-
-    let answers = [];
+    let answerElements = [];
 
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -162,7 +163,7 @@
     }
 
     function renderQuestion() {
-      answers = [];
+      answerElements = [];
       const { question, correctAnswer } = generateProblem();
       const choicesEl = document.createElement('div');
       gameBox.innerHTML = ''; // Clear the game area
@@ -170,9 +171,8 @@
       document.getElementById('score').textContent = score;
       document.getElementById('lives').textContent = lives;
       document.getElementById('time').textContent = timeLeft;
-      
-      let answerPosX = getRandomInt(50, 400); // Random position for answers
 
+      // Generate answer positions
       let answersArray = [correctAnswer];
       while (answersArray.length < 4) {
         let fakeAnswer = correctAnswer + getRandomInt(-10, 10);
@@ -184,10 +184,11 @@
       answersArray.forEach((answer, index) => {
         const choice = document.createElement('div');
         choice.textContent = answer;
-        choice.style.left = `${answerPosX}px`;
+        choice.style.left = `${getRandomInt(50, 350)}px`;  // Random position
         choice.style.top = `${100 + (index * 60)}px`; // Vertical position
         choice.setAttribute('data-answer', answer);
         gameBox.appendChild(choice);
+        answerElements.push(choice);
       });
     }
 
@@ -217,7 +218,7 @@
         }
 
         // Check for collision with answers
-        document.querySelectorAll('.game-box div[data-answer]').forEach(target => {
+        answerElements.forEach(target => {
           let targetRect = target.getBoundingClientRect();
           let bulletRect = bullet.getBoundingClientRect();
 
