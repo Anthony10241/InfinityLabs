@@ -12,10 +12,10 @@
       align-items: center;
       background-color: #f8f8f8;
       margin: 0;
+      padding: 20px;
     }
 
     h1 {
-      margin-top: 2rem;
       color: #800000;
     }
 
@@ -23,7 +23,6 @@
       display: grid;
       grid-template-columns: repeat(4, 100px);
       grid-gap: 10px;
-      margin-top: 2rem;
       background-color: #bbada0;
       padding: 10px;
       border-radius: 10px;
@@ -32,19 +31,21 @@
     .tile {
       width: 100px;
       height: 100px;
-      background-color: #eee4da;
+      background-color: #cdc1b4;
       display: flex;
       justify-content: center;
       align-items: center;
       font-size: 24px;
       font-weight: bold;
-      border-radius: 5px;
-      transition: transform 0.2s ease;
+      color: #333;
+      border-radius: 6px;
+      transition: all 0.2s ease;
     }
 
-    .tile-2048 { background-color: #edc22e; }
-    .tile-1024 { background-color: #f2b179; }
-    .tile-512  { background-color: #f59563; }
+    .tile[data-value="2048"] { background: #edc22e; }
+    .tile[data-value="1024"] { background: #f2b179; }
+    .tile[data-value="512"] { background: #f59563; }
+    .tile[data-value="0"]    { background: #eee4da; color: transparent; }
   </style>
 </head>
 <body>
@@ -52,52 +53,101 @@
   <div id="game-board"></div>
 
   <script>
-    const board = document.getElementById('game-board');
-    let grid = Array(4).fill(null).map(() => Array(4).fill(0));
+    const boardSize = 4;
+    let grid = [];
 
-    function createTile(value) {
-      const div = document.createElement('div');
-      div.className = `tile tile-${value}`;
-      div.textContent = value;
-      return div;
+    function initGrid() {
+      grid = Array.from({ length: boardSize }, () => Array(boardSize).fill(0));
+      addRandomTile();
+      addRandomTile();
+      renderBoard();
     }
 
-    function drawBoard() {
+    function addRandomTile() {
+      const options = [2048, 1024, 512];
+      const empty = [];
+      for (let r = 0; r < boardSize; r++) {
+        for (let c = 0; c < boardSize; c++) {
+          if (grid[r][c] === 0) empty.push([r, c]);
+        }
+      }
+      if (empty.length === 0) return;
+      const [r, c] = empty[Math.floor(Math.random() * empty.length)];
+      grid[r][c] = options[Math.floor(Math.random() * options.length)];
+    }
+
+    function renderBoard() {
+      const board = document.getElementById('game-board');
       board.innerHTML = '';
-      for (let row of grid) {
-        for (let cell of row) {
-          board.appendChild(cell ? createTile(cell) : createTile(''));
+      grid.forEach(row => {
+        row.forEach(value => {
+          const tile = document.createElement('div');
+          tile.className = 'tile';
+          tile.textContent = value !== 0 ? value : '';
+          tile.setAttribute('data-value', value);
+          board.appendChild(tile);
+        });
+      });
+    }
+
+    function slide(row) {
+      const filtered = row.filter(n => n !== 0);
+      for (let i = 0; i < filtered.length - 1; i++) {
+        if (filtered[i] === filtered[i + 1]) {
+          filtered[i] /= 2; // Reduce value like 2048 -> 1024
+          filtered[i + 1] = 0;
         }
+      }
+      return filtered.filter(n => n !== 0).concat(Array(boardSize - filtered.filter(n => n !== 0).length).fill(0));
+    }
+
+    function rotateGridCW() {
+      const newGrid = grid.map((_, i) => grid.map(row => row[i]).reverse());
+      grid = newGrid;
+    }
+
+    function rotateGridCCW() {
+      const newGrid = grid.map((_, i) => grid.map(row => row[row.length - 1 - i]));
+      grid = newGrid;
+    }
+
+    function flipRows() {
+      grid = grid.map(row => row.reverse());
+    }
+
+    function handleMove(direction) {
+      let oldGrid = JSON.stringify(grid);
+      if (direction === 'left') {
+        grid = grid.map(slide);
+      } else if (direction === 'right') {
+        flipRows();
+        grid = grid.map(slide);
+        flipRows();
+      } else if (direction === 'up') {
+        rotateGridCCW();
+        grid = grid.map(slide);
+        rotateGridCW();
+      } else if (direction === 'down') {
+        rotateGridCW();
+        grid = grid.map(slide);
+        rotateGridCCW();
+      }
+      if (JSON.stringify(grid) !== oldGrid) {
+        addRandomTile();
+        renderBoard();
       }
     }
 
-    function spawnRandomTile() {
-      const emptyCells = [];
-      for (let r = 0; r < 4; r++) {
-        for (let c = 0; c < 4; c++) {
-          if (grid[r][c] === 0) emptyCells.push([r, c]);
-        }
+    document.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case 'ArrowLeft': handleMove('left'); break;
+        case 'ArrowRight': handleMove('right'); break;
+        case 'ArrowUp': handleMove('up'); break;
+        case 'ArrowDown': handleMove('down'); break;
       }
-      if (emptyCells.length === 0) return;
-
-      const [r, c] = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-      grid[r][c] = [2048, 1024, 512][Math.floor(Math.random() * 3)];
-    }
-
-    function setupGame() {
-      grid = Array(4).fill(null).map(() => Array(4).fill(0));
-      spawnRandomTile();
-      spawnRandomTile();
-      drawBoard();
-    }
-
-    window.addEventListener('keydown', e => {
-      // Movement handling placeholder
-      // You can add key controls here (e.g., slide left, right, up, down)
-      console.log(`Key pressed: ${e.key}`);
     });
 
-    setupGame();
+    initGrid();
   </script>
 </body>
 </html>
