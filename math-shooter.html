@@ -12,6 +12,7 @@
       color: #800000;
       text-align: center;
       padding: 20px;
+      overflow: hidden;
     }
 
     h1 {
@@ -25,11 +26,28 @@
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      height: 500px;
+      width: 100%;
     }
 
-    .question {
-      font-size: 2rem;
-      margin-bottom: 20px;
+    .shooter {
+      width: 50px;
+      height: 50px;
+      background-color: #FF6B6B;
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .bullet {
+      width: 5px;
+      height: 10px;
+      background-color: #00FF00;
+      position: absolute;
+      bottom: 60px;
+      display: none;
     }
 
     .choices div {
@@ -38,8 +56,8 @@
       margin: 5px;
       cursor: pointer;
       border-radius: 5px;
-      display: inline-block;
       font-size: 1.2rem;
+      position: absolute;
     }
 
     .score, .lives, .timer {
@@ -59,15 +77,14 @@
     <h1>🎯 Algebra Shooter Game</h1>
   </header>
 
-  <div class="game-box">
-    <div class="question" id="question">Get Ready...</div>
-    <div class="choices" id="choices"></div>
-    <div class="feedback" id="feedback"></div>
+  <div class="game-box" id="gameBox">
+    <div class="shooter" id="shooter"></div>
+    <div class="bullet" id="bullet"></div>
+
     <div class="score">Score: <span id="score">0</span></div>
     <div class="lives">Lives: <span id="lives">3</span></div>
     <div class="timer">Time: <span id="time">20</span>s</div>
     <div class="game-over" id="gameOver"></div>
-    <button onclick="startGame()">🔁 Restart Game</button>
   </div>
 
   <audio id="correctSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
@@ -77,10 +94,16 @@
   <script>
     let score = 0;
     let lives = 3;
-    let timeLeft = 20;  // Increased initial time
+    let timeLeft = 20;
     let timer;
     let correctAnswer;
     let difficulty = 1;
+    let shooter = document.getElementById('shooter');
+    let bullet = document.getElementById('bullet');
+    let gameBox = document.getElementById('gameBox');
+    let bulletInterval;
+
+    let answers = [];
 
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -139,79 +162,88 @@
     }
 
     function renderQuestion() {
-      clearInterval(timer);
-      timeLeft = 20;  // Reset time per question
-      document.getElementById('time').textContent = timeLeft;
-      timer = setInterval(() => {
-        timeLeft--;
-        document.getElementById('time').textContent = timeLeft;
-        if (timeLeft <= 0) {
-          handleWrong();
-        }
-      }, 1000);
-
+      answers = [];
       const { question, correctAnswer } = generateProblem();
-      document.getElementById('question').textContent = question;
-      const choicesEl = document.getElementById('choices');
-      choicesEl.innerHTML = '';
+      const choicesEl = document.createElement('div');
+      gameBox.innerHTML = ''; // Clear the game area
 
-      let answers = [correctAnswer];
-      while (answers.length < 4) {
-        let fake = correctAnswer + getRandomInt(-10, 10);
-        if (!answers.includes(fake)) answers.push(fake);
+      document.getElementById('score').textContent = score;
+      document.getElementById('lives').textContent = lives;
+      document.getElementById('time').textContent = timeLeft;
+      
+      let answerPosX = getRandomInt(50, 400); // Random position for answers
+
+      let answersArray = [correctAnswer];
+      while (answersArray.length < 4) {
+        let fakeAnswer = correctAnswer + getRandomInt(-10, 10);
+        if (!answersArray.includes(fakeAnswer)) answersArray.push(fakeAnswer);
       }
 
-      answers = answers.sort(() => Math.random() - 0.5);
+      answersArray = answersArray.sort(() => Math.random() - 0.5);
 
-      answers.forEach(answer => {
-        const btn = document.createElement('div');
-        btn.className = 'choice';
-        btn.textContent = answer;
-        btn.onclick = () => handleAnswer(answer === correctAnswer);
-        choicesEl.appendChild(btn);
+      answersArray.forEach((answer, index) => {
+        const choice = document.createElement('div');
+        choice.textContent = answer;
+        choice.style.left = `${answerPosX}px`;
+        choice.style.top = `${100 + (index * 60)}px`; // Vertical position
+        choice.setAttribute('data-answer', answer);
+        gameBox.appendChild(choice);
       });
     }
 
-    function handleAnswer(isCorrect) {
-      clearInterval(timer);
-      const feedback = document.getElementById('feedback');
-      const correctSound = document.getElementById('correctSound');
-      const wrongSound = document.getElementById('wrongSound');
-
-      if (isCorrect) {
-        score++;
-        feedback.textContent = "✅ Correct!";
-        correctSound.play();
-      } else {
-        handleWrong();
-        return;
+    function moveShooter(e) {
+      const gameBoxWidth = gameBox.offsetWidth;
+      const shooterWidth = shooter.offsetWidth;
+      if (e.key === "ArrowLeft" && shooter.offsetLeft > 0) {
+        shooter.style.left = `${shooter.offsetLeft - 10}px`;
       }
-
-      document.getElementById('score').textContent = score;
-      setTimeout(() => {
-        feedback.textContent = '';
-        renderQuestion();
-      }, 1000);
+      if (e.key === "ArrowRight" && shooter.offsetLeft < gameBoxWidth - shooterWidth) {
+        shooter.style.left = `${shooter.offsetLeft + 10}px`;
+      }
     }
 
-    function handleWrong() {
-      clearInterval(timer);
-      const feedback = document.getElementById('feedback');
-      const wrongSound = document.getElementById('wrongSound');
-      lives--;
+    function shootBullet() {
+      bullet.style.display = "block";
+      bullet.style.left = `${shooter.offsetLeft + 22}px`; // Center the bullet
+      bullet.style.top = `${shooter.offsetTop - 10}px`;
 
-      feedback.textContent = `❌ Wrong! Answer was x = ${correctAnswer}`;
-      document.getElementById('lives').textContent = lives;
-      wrongSound.play();
+      bulletInterval = setInterval(() => {
+        let bulletTop = bullet.offsetTop;
+        bullet.style.top = `${bulletTop - 10}px`; // Move the bullet up
 
-      if (lives <= 0) {
-        endGame();
-      } else {
-        setTimeout(() => {
-          feedback.textContent = '';
-          renderQuestion();
-        }, 1000);
-      }
+        if (bulletTop <= 0) {
+          clearInterval(bulletInterval);
+          bullet.style.display = "none";
+        }
+
+        // Check for collision with answers
+        document.querySelectorAll('.game-box div[data-answer]').forEach(target => {
+          let targetRect = target.getBoundingClientRect();
+          let bulletRect = bullet.getBoundingClientRect();
+
+          if (
+            bulletRect.top <= targetRect.bottom &&
+            bulletRect.left >= targetRect.left &&
+            bulletRect.right <= targetRect.right
+          ) {
+            if (parseInt(target.getAttribute('data-answer')) === correctAnswer) {
+              score++;
+              document.getElementById('score').textContent = score;
+              clearInterval(bulletInterval);
+              bullet.style.display = "none";
+              renderQuestion();
+            } else {
+              lives--;
+              document.getElementById('lives').textContent = lives;
+              clearInterval(bulletInterval);
+              bullet.style.display = "none";
+              if (lives <= 0) {
+                endGame();
+              }
+            }
+          }
+        });
+      }, 50);
     }
 
     function endGame() {
@@ -219,19 +251,22 @@
       const gameOverSound = document.getElementById('gameOverSound');
       document.getElementById('gameOver').textContent = `💀 Game Over! Final Score: ${score}`;
       gameOverSound.play();
-      document.getElementById('choices').innerHTML = '';
-      document.getElementById('question').textContent = 'Game Over!';
+      renderQuestion();
     }
 
     function startGame() {
       score = 0;
       lives = 3;
-      difficulty = 1;
       document.getElementById('score').textContent = score;
       document.getElementById('lives').textContent = lives;
       document.getElementById('gameOver').textContent = '';
       renderQuestion();
     }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === " " || e.key === "Enter") shootBullet();
+      moveShooter(e);
+    });
 
     startGame();
   </script>
