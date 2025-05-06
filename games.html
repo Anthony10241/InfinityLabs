@@ -93,12 +93,14 @@
     .container {
       display: flex;
       flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
-    @media only screen and (min-width:320px) {
+    @media only screen and (max-width: 600px) {
       .container {
-        display: flex;
         flex-direction: column;
+        align-items: center;
       }
     }
   </style>
@@ -107,7 +109,8 @@
   <nav>
     <a href="index.html" class="nav-button">Home</a>
     <a href="lessons.html" class="nav-button">Math Lessons</a>
-    <a href="math-vocab.html" class="nav-button" target="_blank">Math Vocabulary</a>
+    <a href="math-vocab.html" class="nav-button">Math Vocabulary</a>
+    <a href="games.html" class="nav-button">Math Games</a>
   </nav>
 
   <header>
