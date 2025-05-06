@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: 'Roboto', sans-serif;
-      background-color: #D3D3D3;
+      background: linear-gradient(to bottom right, #f7f7f7, #d3d3d3);
       color: #800000;
       margin: 0;
     }
@@ -32,35 +32,42 @@
 
     header {
       text-align: center;
-      padding: 2rem;
+      padding: 3rem 1rem 1rem;
     }
 
     h1 {
       font-family: 'Lora', serif;
-      font-size: 2.5rem;
+      font-size: 2.8rem;
     }
 
     main {
-      padding: 2rem;
+      padding: 2rem 1rem;
     }
 
     .unit {
-      background: #fff;
+      background: #ffffff;
       border-left: 6px solid #FFD700;
       padding: 1.5rem;
       margin: 1.5rem auto;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       max-width: 700px;
+      transition: transform 0.3s ease;
+    }
+
+    .unit:hover {
+      transform: scale(1.02);
     }
 
     .unit h2 {
       font-family: 'Lora', serif;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
     }
 
     .unit p {
-      font-size: 1rem;
+      font-size: 1.05rem;
+      color: #333;
     }
   </style>
 </head>
