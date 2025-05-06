@@ -1,1 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Math Vocabulary - InfinityLabs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Lora:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to bottom right, #f0f0f0, #d3d3d3);
+      color: #800000;
+      margin: 0;
+    }
+
+    nav {
+      background-color: #800000;
+      padding: 1rem 2rem;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      color: #FFD700;
+      text-decoration: none;
+      font-size: 1.1rem;
+      border: 2px solid transparent;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      border-color: #FFD700;
+      background-color: #FFD70010;
+    }
+
+    header {
+      text-align: center;
+      padding: 3rem 1rem 1rem;
+    }
+
+    h1 {
+      font-family: 'Lora', serif;
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #444444;
+    }
+
+    main {
+      padding: 2rem 1rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .vocab-item {
+      background: #ffffff;
+      border-left: 6px solid #FFD700;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .vocab-item h2 {
+      margin: 0 0 0.5rem;
+      color: #800000;
+    }
+
+    .vocab-item p {
+      margin: 0;
+      color: #333;
+    }
+
+    .nav-button {
+      color: #800000;
+      background-color: #FFD700;
+      text-decoration: none;
+      font-size: 1rem;
+      border: 2px solid #FFD700;
+      padding: 6px 14px;
+      border-radius: 8px;
+      transition: 0.3s;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+
+    .nav-button:hover {
+      background-color: #800000;
+      color: #FFD700;
+      border-color: #800000;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-button">Home</a>
+    <a href="lessons.html" class="nav-button">Math Lessons</a>
+  </nav>
+
+  <header>
+    <h1>Math Vocabulary</h1>
+    <p class="subtitle">Key algebra terms to boost your understanding</p>
+  </header>
+
+  <main>
+    <div class="vocab-item">
+      <h2>Variable</h2>
+      <p>A symbol, usually a letter, that represents a number in mathematical expressions or equations.</p>
+    </div>
+
+    <div class="vocab-item">
+      <h2>Equation</h2>
+      <p>A mathematical statement that shows two expressions are equal, using the equal sign (=).</p>
+    </div>
+
+    <div class="vocab-item">
+      <h2>Coefficient</h2>
+      <p>The number that multiplies a variable in an algebraic expression.</p>
+    </div>
+
+    <div class="vocab-item">
+      <h2>Expression</h2>
+      <p>A combination of numbers, variables, and operations that represents a value.</p>
+    </div>
+  </main>
+</body>
+</html>
 
