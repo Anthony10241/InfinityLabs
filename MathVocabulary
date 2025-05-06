@@ -128,6 +128,11 @@
       <h2>Expression</h2>
       <p>A combination of numbers, variables, and operations that represents a value.</p>
     </div>
+
+    <!-- New Card to link back to Home -->
+    <div class="vocab-item">
+      <a href="index.html" class="nav-button">🏠 Back to Home</a>
+    </div>
   </main>
 </body>
 </html>
