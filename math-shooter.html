@@ -93,6 +93,23 @@
       font-size: 1.4rem;
       font-weight: bold;
     }
+
+    .back-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s;
+    }
+
+    .back-button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
@@ -109,6 +126,9 @@
     <div class="bullet" id="bullet"></div>
   </div>
   <div id="gameOver"></div>
+
+  <!-- Back to Games Button -->
+  <button class="back-button" onclick="window.location.href='games.html'">Back to Math Games</button>
 
   <script>
     const shooter = document.getElementById('shooter');
@@ -130,7 +150,6 @@
     let gameActive = true;
     let timer = 20;
     let timerInterval;
-    const minSpacing = 50;  // Minimum space between targets
 
     function getRandom(min, max, exclude = []) {
       let num;
@@ -178,47 +197,19 @@
       }
 
       choices = choices.sort(() => Math.random() - 0.5); // shuffle
-      placeChoices(choices);
+      choices.forEach(val => {
+        const choice = document.createElement('div');
+        choice.className = 'choice';
+        choice.textContent = val;
+        choice.dataset.answer = val;
+        choice.style.top = `${getRandom(50, gameBox.clientHeight - 150)}px`;
+        choice.style.left = `${getRandom(50, gameBox.clientWidth - 100)}px`;
+        gameBox.appendChild(choice);
+        answerElements.push(choice);
+      });
+
       updateLaser();
       startTimer();
-    }
-
-    function placeChoices(choices) {
-      let attempts = 0;
-      answerElements = [];
-      const maxAttempts = 100; // Prevent infinite loop if positioning fails
-
-      while (answerElements.length < 4 && attempts < maxAttempts) {
-        let choice = choices[answerElements.length];
-        const top = getRandom(50, gameBox.clientHeight - 150);
-        const left = getRandom(50, gameBox.clientWidth - 100);
-        let overlap = false;
-
-        for (let el of answerElements) {
-          const elRect = el.getBoundingClientRect();
-          if (
-            left < elRect.right + minSpacing &&
-            left + 100 > elRect.left - minSpacing &&
-            top < elRect.bottom + minSpacing &&
-            top + 40 > elRect.top - minSpacing
-          ) {
-            overlap = true;
-            break;
-          }
-        }
-
-        if (!overlap) {
-          const choiceEl = document.createElement('div');
-          choiceEl.className = 'choice';
-          choiceEl.textContent = choice;
-          choiceEl.dataset.answer = choice;
-          choiceEl.style.top = `${top}px`;
-          choiceEl.style.left = `${left}px`;
-          gameBox.appendChild(choiceEl);
-          answerElements.push(choiceEl);
-        }
-        attempts++;
-      }
     }
 
     function updateLaser() {
