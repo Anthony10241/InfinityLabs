@@ -60,6 +60,7 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       max-width: 700px;
       transition: transform 0.3s ease;
+      position: relative;
     }
 
     .unit:hover {
@@ -75,6 +76,26 @@
     .unit p {
       font-size: 1.05rem;
       color: #333;
+    }
+
+    .lesson-button {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      padding: 8px 16px;
+      background-color: #800000;
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+
+    .lesson-button:hover {
+      background-color: #FF6B6B;
+      color: #800000;
     }
   </style>
 </head>
@@ -92,26 +113,31 @@
     <div class="unit">
       <h2>Units 1 & 8 – Linear Functions & Geometry</h2>
       <p>Learn about linear graphs, slope-intercept form, point-slope form, arithmetic sequences, perpendicular lines, distance, and midpoint.</p>
+      <a href="lesson1.html" class="lesson-button">Start Lesson</a>
     </div>
 
     <div class="unit">
       <h2>Units 2 & 3 – Linear Inequalities & Radicals</h2>
       <p>Explore systems of linear inequalities, simplified radicals, solutions, and how to identify rational and irrational numbers.</p>
+      <a href="lesson2.html" class="lesson-button">Start Lesson</a>
     </div>
 
     <div class="unit">
       <h2>Unit 4 – Quadratics</h2>
       <p>Dive into solving quadratic equations, the quadratic formula, vertex form, and graphing parabolas.</p>
+      <a href="lesson3.html" class="lesson-button">Start Lesson</a>
     </div>
 
     <div class="unit">
       <h2>Units 5 & 6 – Exponentials</h2>
       <p>Understand geometric sequences, modeling growth and decay, graphing exponential functions, and solving exponential equations.</p>
+      <a href="lesson4.html" class="lesson-button">Start Lesson</a>
     </div>
 
     <div class="unit">
       <h2>Unit 7 – Statistics</h2>
       <p>Learn about mean, median, box plots, the 5-number summary, outliers, correlation, and causation.</p>
+      <a href="lesson5.html" class="lesson-button">Start Lesson</a>
     </div>
   </main>
 </body>
