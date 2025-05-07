@@ -55,6 +55,7 @@
       border-radius: 5px;
       color: #333;
       transition: transform 0.2s ease;
+      z-index: 10;
     }
 
     .tile[data-value="2048"] { background: #edc22e; }
@@ -112,6 +113,7 @@
     const gameOverText = document.getElementById('game-over');
     const size = 4;
     const cellSize = 75 + 6;
+
     let grid, tiles;
 
     function initGrid() {
@@ -134,7 +136,9 @@
         tile.className = 'tile';
         tile.textContent = t.value;
         tile.dataset.value = t.value;
-        tile.style.transform = `translate(${t.x * cellSize}px, ${t.y * cellSize}px)`;
+        const tx = t.x * cellSize;
+        const ty = t.y * cellSize;
+        tile.style.transform = `translate(${tx}px, ${ty}px)`;
         game.appendChild(tile);
       });
     }
@@ -149,7 +153,7 @@
 
       let spot = empty[Math.floor(Math.random() * empty.length)];
       grid[spot.y][spot.x] = value;
-      tiles.push({ ...spot, value });
+      tiles.push({ x: spot.x, y: spot.y, px: spot.x, py: spot.y, value });
     }
 
     function move(dx, dy) {
@@ -194,21 +198,48 @@
 
       if (moved) {
         updateTiles();
-        addTile();
-        drawBoard();
-        if (checkGameOver()) {
-          gameOverText.textContent = "Game Over!";
-        }
+        animateTiles(() => {
+          addTile();
+          drawBoard();
+          if (checkGameOver()) {
+            gameOverText.textContent = "Game Over!";
+          }
+        });
       }
     }
 
     function updateTiles() {
-      tiles = [];
+      const newTiles = [];
       for (let y = 0; y < size; y++) {
         for (let x = 0; x < size; x++) {
-          if (grid[y][x] !== 0) tiles.push({ x, y, value: grid[y][x] });
+          if (grid[y][x] !== 0) {
+            const existing = tiles.find(t => t.value === grid[y][x] && t.x === x && t.y === y);
+            newTiles.push({
+              value: grid[y][x],
+              px: existing?.x ?? x,
+              py: existing?.y ?? y,
+              x, y
+            });
+          }
         }
       }
+      tiles = newTiles;
+    }
+
+    function animateTiles(callback) {
+      drawBoard();
+      requestAnimationFrame(() => {
+        tiles.forEach(t => {
+          const tile = document.querySelector(
+            `.tile[data-value="${t.value}"]:not(.merged)`
+          );
+          if (tile) {
+            tile.style.transform = `translate(${t.x * cellSize}px, ${t.y * cellSize}px)`;
+          }
+        });
+
+        setTimeout(callback, 200);
+      });
     }
 
     function checkGameOver() {
