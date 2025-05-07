@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Algebra Shooter Game - InfinityLabs</title>
   <style>
     body {
@@ -42,12 +43,23 @@
       box-shadow: 0 6px 10px rgba(0,0,0,0.4);
     }
     .bullet {
-      width: 6px;
-      height: 20px;
+      width: 10px;
+      height: 30px;
       position: absolute;
-      background-color: limegreen;
+      background-color: lime;
       display: none;
-      box-shadow: 0 0 10px limegreen;
+      box-shadow: 0 0 15px 5px lime;
+      border-radius: 5px;
+      z-index: 10;
+    }
+    .laser-line {
+      width: 2px;
+      height: 100%;
+      background: rgba(0, 255, 0, 0.3);
+      position: absolute;
+      top: 0;
+      z-index: 1;
+      pointer-events: none;
     }
     .choice {
       position: absolute;
@@ -83,6 +95,7 @@
   <div id="questionDisplay">Solve: </div>
   <div class="game-box" id="gameBox">
     <div class="shooter" id="shooter"></div>
+    <div class="laser-line" id="laserLine"></div>
     <div class="bullet" id="bullet"></div>
   </div>
   <div id="gameOver"></div>
@@ -91,6 +104,7 @@
     const shooter = document.getElementById('shooter');
     const bullet = document.getElementById('bullet');
     const gameBox = document.getElementById('gameBox');
+    const laserLine = document.getElementById('laserLine');
     const gameOverDisplay = document.getElementById('gameOver');
     const scoreDisplay = document.getElementById('score');
     const livesDisplay = document.getElementById('lives');
@@ -146,14 +160,12 @@
       if (!gameActive) return;
       answerElements.forEach(el => el.remove());
       answerElements = [];
-
       correctAnswer = generateQuestion();
+
       let choices = [correctAnswer];
       for (let i = 1; i < 4; i++) {
         choices.push(getRandom(correctAnswer - 5, correctAnswer + 5, choices));
       }
-
-      choices = choices.sort(() => Math.random() - 0.5); // Shuffle
 
       choices.forEach(val => {
         const choice = document.createElement('div');
@@ -166,15 +178,13 @@
         answerElements.push(choice);
       });
 
-      gameOverDisplay.textContent = '';
       startTimer();
     }
 
     function shootBullet() {
-      if (!gameActive || bullet.style.display === 'block') return;
-
+      if (!gameActive) return;
       bullet.style.display = 'block';
-      bullet.style.left = `${shooter.offsetLeft + shooter.offsetWidth / 2 - 3}px`;
+      bullet.style.left = `${shooter.offsetLeft + shooter.offsetWidth / 2 - bullet.offsetWidth / 2}px`;
       bullet.style.top = `${shooter.offsetTop}px`;
 
       clearInterval(bulletInterval);
@@ -189,17 +199,11 @@
           const b = bullet.getBoundingClientRect();
           const t = target.getBoundingClientRect();
 
-          if (
-            b.top <= t.bottom &&
-            b.bottom >= t.top &&
-            b.left <= t.right &&
-            b.right >= t.left
-          ) {
+          if (b.bottom >= t.top && b.top <= t.bottom &&
+              b.right >= t.left && b.left <= t.right) {
             clearInterval(bulletInterval);
             bullet.style.display = 'none';
-
-            const selected = parseInt(target.dataset.answer);
-            if (selected === correctAnswer) {
+            if (parseInt(target.dataset.answer) === correctAnswer) {
               score++;
               gameOverDisplay.textContent = "✔ Correct!";
             } else {
@@ -228,13 +232,16 @@
         shooter.style.left = `${Math.min(rightLimit, currentLeft + speed)}px`;
       }
 
+      // Update laser line
+      laserLine.style.left = `${shooter.offsetLeft + shooter.offsetWidth / 2 - 1}px`;
+
       if (gameActive) requestAnimationFrame(moveShooter);
     }
 
     function endGame() {
       gameActive = false;
       clearInterval(timerInterval);
-      gameOverDisplay.textContent = "💀 Game Over! Final Score: " + score;
+      gameOverDisplay.textContent += " 💀 Game Over!";
       answerElements.forEach(el => el.remove());
     }
 
@@ -249,13 +256,8 @@
 
     function initGame() {
       shooter.style.left = `${gameBox.clientWidth / 2 - shooter.clientWidth / 2}px`;
-      gameActive = true;
-      score = 0;
-      lives = 3;
-      scoreDisplay.textContent = score;
-      livesDisplay.textContent = lives;
       renderQuestion();
-      moveShooter();
+      requestAnimationFrame(moveShooter);
     }
 
     window.onload = initGame;
