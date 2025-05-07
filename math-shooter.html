@@ -4,257 +4,192 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Algebra Shooter Game - InfinityLabs</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Lora:wght@700&display=swap" rel="stylesheet">
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       overflow: hidden;
-    }
-
-    body {
-      font-family: 'Roboto', sans-serif;
+      font-family: Arial, sans-serif;
       background: linear-gradient(to bottom, #c0d0ff, #f0f0f0);
-      color: #800000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      height: 100vh;
     }
-
     h1 {
-      font-family: 'Lora', serif;
-      font-size: 2.5rem;
-      margin: 1rem 0;
+      text-align: center;
+      margin-top: 10px;
     }
-
+    .game-info {
+      text-align: center;
+      margin-bottom: 5px;
+    }
     .game-box {
-      background-color: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      background-color: white;
       position: relative;
-      width: 100vw;
-      height: 85vh;
+      margin: auto;
+      width: 80vw;
+      height: 70vh;
+      border: 3px solid #888;
+      border-radius: 10px;
       overflow: hidden;
-      perspective: 1000px;
     }
-
     .shooter {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, #ff6b6b, #ff9999);
+      width: 60px;
+      height: 60px;
+      background-color: crimson;
       border-radius: 50%;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       position: absolute;
       bottom: 10px;
       left: 50%;
-      transform: translateX(-50%) translateZ(50px);
-      transition: left 0.1s linear;
+      transform: translateX(-50%);
+      transition: left 0.05s linear;
     }
-
     .bullet {
       width: 5px;
-      height: 15px;
-      background-color: #00FF00;
+      height: 20px;
+      background-color: limegreen;
       position: absolute;
       display: none;
-      z-index: 10;
     }
-
     .choice {
-      padding: 12px 24px;
-      background: linear-gradient(to top right, #ff6b6b, #ffc1c1);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      margin: 10px;
-      cursor: pointer;
-      border-radius: 8px;
-      font-size: 1.2rem;
       position: absolute;
-      transform: rotateX(15deg) rotateY(5deg);
+      padding: 10px 20px;
+      background-color: #ff9999;
+      border-radius: 8px;
       color: white;
+      font-size: 1.1rem;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+      cursor: default;
     }
-
-    .score, .lives, .timer {
-      font-size: 1.2rem;
-      margin: 5px;
-    }
-
-    .game-over {
-      font-size: 2rem;
+    #gameOver {
+      text-align: center;
+      font-size: 1.5rem;
       color: red;
-      margin-top: 20px;
+      margin-top: 10px;
+      height: 30px;
+      transition: opacity 0.3s ease;
     }
   </style>
 </head>
 <body>
-  <h1>🎯 Algebra Shooter Game</h1>
-  <div class="score">Score: <span id="score">0</span></div>
-  <div class="lives">Lives: <span id="lives">3</span></div>
-  <div class="timer">Time: <span id="time">20</span>s</div>
-
+  <h1>🎯 Algebra Shooter</h1>
+  <div class="game-info">
+    Score: <span id="score">0</span> |
+    Lives: <span id="lives">3</span> |
+    Time: <span id="time">--</span>
+  </div>
   <div class="game-box" id="gameBox">
     <div class="shooter" id="shooter"></div>
     <div class="bullet" id="bullet"></div>
-    <div class="game-over" id="gameOver"></div>
   </div>
-
-  <audio id="correctSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-  <audio id="wrongSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
-  <audio id="gameOverSound" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"></audio>
+  <div id="gameOver"></div>
 
   <script>
-    let score = 0;
-    let lives = 3;
-    let timeLeft = 20;
-    let correctAnswer;
-    let difficulty = 1;
-    let shooter = document.getElementById('shooter');
-    let bullet = document.getElementById('bullet');
-    let gameBox = document.getElementById('gameBox');
+    const shooter = document.getElementById('shooter');
+    const bullet = document.getElementById('bullet');
+    const gameBox = document.getElementById('gameBox');
+    const gameOverDisplay = document.getElementById('gameOver');
+    const scoreDisplay = document.getElementById('score');
+    const livesDisplay = document.getElementById('lives');
+
+    let keys = {};
     let bulletInterval;
     let answerElements = [];
-    let keys = {};
+    let correctAnswer;
+    let score = 0;
+    let lives = 3;
+    let gameActive = true;
 
-    function getRandomInt(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
+    const getRandom = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-    function updateDifficulty() {
-      if (score >= 10) difficulty = 3;
-      else if (score >= 5) difficulty = 2;
-    }
-
-    function generateProblem() {
-      updateDifficulty();
-      let a, b, operator;
-      const operators = ['+', '-', '*', '/'];
-      operator = operators[getRandomInt(0, operators.length - 1)];
-
-      switch (difficulty) {
-        case 1:
-          a = getRandomInt(1, 10);
-          b = getRandomInt(1, 10);
-          break;
-        case 2:
-          a = getRandomInt(10, 20);
-          b = getRandomInt(1, 10);
-          break;
-        case 3:
-          a = getRandomInt(10, 30);
-          b = getRandomInt(1, 20);
-          break;
-      }
-
-      switch (operator) {
-        case '+':
-          correctAnswer = a;
-          return { question: `x + ${b} = ${a + b}`, correctAnswer };
-        case '-':
-          correctAnswer = a;
-          return { question: `x - ${b} = ${a - b}`, correctAnswer };
-        case '*':
-          correctAnswer = a;
-          return { question: `x * ${b} = ${a * b}`, correctAnswer };
-        case '/':
-          correctAnswer = a;
-          return { question: `x / ${b} = ${a / b}`, correctAnswer };
-      }
+    function generateQuestion() {
+      let a = getRandom(1, 10);
+      let b = getRandom(1, 10);
+      correctAnswer = a;
+      return {
+        question: `x + ${b} = ${a + b}`,
+        correct: a
+      };
     }
 
     function renderQuestion() {
-      answerElements = [];
-      const { question, correctAnswer } = generateProblem();
-      const questionEl = document.createElement('div');
-      questionEl.textContent = question;
-      questionEl.style.position = 'absolute';
-      questionEl.style.top = '20px';
-      questionEl.style.left = '20px';
-      questionEl.style.fontSize = '1.5rem';
-      gameBox.innerHTML = '';
-      gameBox.appendChild(document.getElementById('shooter'));
-      gameBox.appendChild(document.getElementById('bullet'));
-      gameBox.appendChild(questionEl);
+      if (!gameActive) return;
+      answerElements.forEach(el => el.remove());
+      const { question, correct } = generateQuestion();
+      correctAnswer = correct;
 
-      let answersArray = [correctAnswer];
-      while (answersArray.length < 4) {
-        let fake = correctAnswer + getRandomInt(-10, 10);
-        if (!answersArray.includes(fake)) answersArray.push(fake);
-      }
-      answersArray.sort(() => Math.random() - 0.5);
-
-      answersArray.forEach((ans, i) => {
+      for (let i = 0; i < 4; i++) {
+        const val = i === 0 ? correct : correct + getRandom(-5, 5);
         const choice = document.createElement('div');
         choice.className = 'choice';
-        choice.textContent = ans;
-        choice.setAttribute('data-answer', ans);
-        choice.style.left = `${getRandomInt(50, gameBox.offsetWidth - 100)}px`;
-        choice.style.top = `${getRandomInt(100, gameBox.offsetHeight - 200)}px`;
+        choice.textContent = val;
+        choice.dataset.answer = val;
+        choice.style.top = `${getRandom(50, gameBox.clientHeight - 150)}px`;
+        choice.style.left = `${getRandom(50, gameBox.clientWidth - 100)}px`;
         gameBox.appendChild(choice);
         answerElements.push(choice);
-      });
+      }
     }
 
     function shootBullet() {
+      if (!gameActive) return;
       bullet.style.display = 'block';
-      bullet.style.left = `${shooter.offsetLeft + shooter.offsetWidth / 2 - 2}px`;
+      bullet.style.left = `${shooter.offsetLeft + shooter.offsetWidth/2 - 2.5}px`;
       bullet.style.top = `${shooter.offsetTop}px`;
 
       clearInterval(bulletInterval);
       bulletInterval = setInterval(() => {
         bullet.style.top = `${bullet.offsetTop - 10}px`;
-
         if (bullet.offsetTop <= 0) {
           bullet.style.display = 'none';
           clearInterval(bulletInterval);
         }
 
         answerElements.forEach(target => {
-          const bRect = bullet.getBoundingClientRect();
-          const tRect = target.getBoundingClientRect();
+          const b = bullet.getBoundingClientRect();
+          const t = target.getBoundingClientRect();
+          const g = gameBox.getBoundingClientRect();
 
-          if (
-            bRect.top <= tRect.bottom &&
-            bRect.bottom >= tRect.top &&
-            bRect.left <= tRect.right &&
-            bRect.right >= tRect.left
-          ) {
-            bullet.style.display = 'none';
+          if (b.bottom >= t.top && b.top <= t.bottom &&
+              b.right >= t.left && b.left <= t.right) {
             clearInterval(bulletInterval);
-            if (parseInt(target.dataset.answer) === correctAnswer) {
+            bullet.style.display = 'none';
+            const isCorrect = parseInt(target.dataset.answer) === correctAnswer;
+            if (isCorrect) {
               score++;
-              document.getElementById('score').textContent = score;
-              document.getElementById('gameOver').textContent = '✔ Correct!';
-              document.getElementById('correctSound').play();
+              gameOverDisplay.style.color = 'green';
+              gameOverDisplay.textContent = "✔ Correct!";
             } else {
               lives--;
-              document.getElementById('lives').textContent = lives;
-              document.getElementById('gameOver').textContent = '✖ Incorrect';
-              document.getElementById('wrongSound').play();
-              if (lives <= 0) endGame();
+              gameOverDisplay.style.color = 'red';
+              gameOverDisplay.textContent = "✘ Wrong!";
+              if (lives <= 0) return endGame();
             }
+
+            scoreDisplay.textContent = score;
+            livesDisplay.textContent = lives;
             setTimeout(() => {
-              document.getElementById('gameOver').textContent = '';
+              gameOverDisplay.textContent = "";
               renderQuestion();
             }, 800);
           }
         });
-      }, 40);
+      }, 30);
     }
 
     function endGame() {
-      document.getElementById('gameOver').textContent = `💀 Game Over! Final Score: ${score}`;
-      document.getElementById('gameOverSound').play();
+      gameActive = false;
+      gameOverDisplay.style.color = 'black';
+      gameOverDisplay.textContent = `💀 Game Over! Final Score: ${score}`;
     }
 
     function moveShooter() {
-      const moveSpeed = 8;
-      if (keys['ArrowLeft'] && shooter.offsetLeft > 0) {
-        shooter.style.left = `${shooter.offsetLeft - moveSpeed}px`;
+      if (!gameActive) return;
+      const speed = 6;
+      const left = shooter.offsetLeft;
+      if (keys["ArrowLeft"] && left > 0) {
+        shooter.style.left = `${left - speed}px`;
       }
-      if (keys['ArrowRight'] && shooter.offsetLeft < gameBox.offsetWidth - shooter.offsetWidth) {
-        shooter.style.left = `${shooter.offsetLeft + moveSpeed}px`;
+      if (keys["ArrowRight"] && left + shooter.clientWidth < gameBox.clientWidth) {
+        shooter.style.left = `${left + speed}px`;
       }
     }
 
@@ -263,14 +198,20 @@
       requestAnimationFrame(gameLoop);
     }
 
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener("keydown", e => {
       keys[e.key] = true;
-      if (e.key === ' ' || e.key === 'Enter') shootBullet();
+      if ((e.key === " " || e.key === "Enter") && gameActive) shootBullet();
     });
-    document.addEventListener('keyup', (e) => keys[e.key] = false);
 
-    renderQuestion();
-    gameLoop();
+    document.addEventListener("keyup", e => keys[e.key] = false);
+
+    function initGame() {
+      shooter.style.left = `${gameBox.clientWidth / 2 - shooter.clientWidth / 2}px`;
+      renderQuestion();
+      gameLoop();
+    }
+
+    window.onload = initGame;
   </script>
 </body>
 </html>
