@@ -17,11 +17,12 @@
 
     h1 {
       color: #800000;
+      margin-bottom: 1rem;
     }
 
     #game {
       position: relative;
-      width: 332px; /* 4 * 75px + 3 * 6px gap */
+      width: 332px;
       height: 332px;
       background: #bbada0;
       border-radius: 10px;
@@ -31,6 +32,7 @@
       gap: 6px;
       padding: 6px;
       box-sizing: border-box;
+      margin-bottom: 1rem;
     }
 
     .cell {
@@ -57,30 +59,41 @@
 
     .tile[data-value="2048"] { background: #edc22e; }
     .tile[data-value="1024"] { background: #edc53f; }
-    .tile[data-value="512"] { background: #f2b179; }
-    .tile[data-value="256"] { background: #f59563; }
-    .tile[data-value="128"] { background: #f67c5f; }
-    .tile[data-value="64"]  { background: #f65e3b; }
-    .tile[data-value="32"]  { background: #ec6544; }
-    .tile[data-value="16"]  { background: #edcf72; }
-    .tile[data-value="8"]   { background: #eee1c9; }
-    .tile[data-value="4"]   { background: #ede0c8; }
-    .tile[data-value="2"]   { background: #eee4da; }
+    .tile[data-value="512"]  { background: #f2b179; }
+    .tile[data-value="256"]  { background: #f59563; }
+    .tile[data-value="128"]  { background: #f67c5f; }
+    .tile[data-value="64"]   { background: #f65e3b; }
+    .tile[data-value="32"]   { background: #ec6544; }
+    .tile[data-value="16"]   { background: #edcf72; }
+    .tile[data-value="8"]    { background: #eee1c9; }
+    .tile[data-value="4"]    { background: #ede0c8; }
+    .tile[data-value="2"]    { background: #eee4da; }
 
-    .back-button {
-      margin-top: 1.5rem;
-      display: inline-block;
-      background-color: #FF6B6B;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
+    #controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
     }
 
-    .back-button:hover {
+    button {
+      padding: 10px 16px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #FF6B6B;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
       background-color: #800000;
+    }
+
+    #game-over {
+      color: red;
+      font-weight: bold;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -88,16 +101,28 @@
   <h1>2048 Math Game</h1>
   <div id="game"></div>
 
+  <div id="controls">
+    <button onclick="resetGame()">Restart</button>
+    <button onclick="window.location.href='games.html'">Back to Games</button>
+  </div>
+  <div id="game-over"></div>
+
   <script>
     const game = document.getElementById('game');
+    const gameOverText = document.getElementById('game-over');
     const size = 4;
     const cellSize = 75 + 6;
-    let grid = Array(size).fill().map(() => Array(size).fill(0));
-    let tiles = [];
+    let grid, tiles;
+
+    function initGrid() {
+      grid = Array(size).fill().map(() => Array(size).fill(0));
+      tiles = [];
+      addTile(); addTile();
+      drawBoard();
+    }
 
     function drawBoard() {
       game.innerHTML = '';
-
       for (let i = 0; i < size * size; i++) {
         const cell = document.createElement('div');
         cell.className = 'cell';
@@ -116,11 +141,10 @@
 
     function addTile(value = 2048) {
       let empty = [];
-      for (let y = 0; y < size; y++) {
-        for (let x = 0; x < size; x++) {
+      for (let y = 0; y < size; y++)
+        for (let x = 0; x < size; x++)
           if (grid[y][x] === 0) empty.push({ x, y });
-        }
-      }
+
       if (empty.length === 0) return;
 
       let spot = empty[Math.floor(Math.random() * empty.length)];
@@ -131,7 +155,6 @@
     function move(dx, dy) {
       let moved = false;
       let merged = [];
-
       let order = [...Array(size).keys()];
       if (dx > 0 || dy > 0) order = order.reverse();
 
@@ -170,29 +193,49 @@
       }
 
       if (moved) {
-        tiles = [];
-        for (let y = 0; y < size; y++) {
-          for (let x = 0; x < size; x++) {
-            if (grid[y][x] !== 0) tiles.push({ x, y, value: grid[y][x] });
-          }
-        }
+        updateTiles();
         addTile();
         drawBoard();
+        if (checkGameOver()) {
+          gameOverText.textContent = "Game Over!";
+        }
       }
     }
 
+    function updateTiles() {
+      tiles = [];
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          if (grid[y][x] !== 0) tiles.push({ x, y, value: grid[y][x] });
+        }
+      }
+    }
+
+    function checkGameOver() {
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          if (grid[y][x] === 0) return false;
+          if (x < size - 1 && grid[y][x] === grid[y][x + 1]) return false;
+          if (y < size - 1 && grid[y][x] === grid[y + 1][x]) return false;
+        }
+      }
+      return true;
+    }
+
+    function resetGame() {
+      gameOverText.textContent = '';
+      initGrid();
+    }
+
     document.addEventListener('keydown', (e) => {
+      if (gameOverText.textContent) return;
       if (e.key === 'ArrowUp') move(0, -1);
       if (e.key === 'ArrowDown') move(0, 1);
       if (e.key === 'ArrowLeft') move(-1, 0);
       if (e.key === 'ArrowRight') move(1, 0);
     });
 
-    addTile();
-    addTile();
-    drawBoard();
+    initGrid();
   </script>
-
-  <a href="games.html" class="back-button">← Back to Games</a>
 </body>
 </html>
