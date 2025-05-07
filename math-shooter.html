@@ -130,6 +130,7 @@
     let gameActive = true;
     let timer = 20;
     let timerInterval;
+    const minSpacing = 50;  // Minimum space between targets
 
     function getRandom(min, max, exclude = []) {
       let num;
@@ -177,19 +178,47 @@
       }
 
       choices = choices.sort(() => Math.random() - 0.5); // shuffle
-      choices.forEach(val => {
-        const choice = document.createElement('div');
-        choice.className = 'choice';
-        choice.textContent = val;
-        choice.dataset.answer = val;
-        choice.style.top = `${getRandom(50, gameBox.clientHeight - 150)}px`;
-        choice.style.left = `${getRandom(50, gameBox.clientWidth - 100)}px`;
-        gameBox.appendChild(choice);
-        answerElements.push(choice);
-      });
-
+      placeChoices(choices);
       updateLaser();
       startTimer();
+    }
+
+    function placeChoices(choices) {
+      let attempts = 0;
+      answerElements = [];
+      const maxAttempts = 100; // Prevent infinite loop if positioning fails
+
+      while (answerElements.length < 4 && attempts < maxAttempts) {
+        let choice = choices[answerElements.length];
+        const top = getRandom(50, gameBox.clientHeight - 150);
+        const left = getRandom(50, gameBox.clientWidth - 100);
+        let overlap = false;
+
+        for (let el of answerElements) {
+          const elRect = el.getBoundingClientRect();
+          if (
+            left < elRect.right + minSpacing &&
+            left + 100 > elRect.left - minSpacing &&
+            top < elRect.bottom + minSpacing &&
+            top + 40 > elRect.top - minSpacing
+          ) {
+            overlap = true;
+            break;
+          }
+        }
+
+        if (!overlap) {
+          const choiceEl = document.createElement('div');
+          choiceEl.className = 'choice';
+          choiceEl.textContent = choice;
+          choiceEl.dataset.answer = choice;
+          choiceEl.style.top = `${top}px`;
+          choiceEl.style.left = `${left}px`;
+          gameBox.appendChild(choiceEl);
+          answerElements.push(choiceEl);
+        }
+        attempts++;
+      }
     }
 
     function updateLaser() {
