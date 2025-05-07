@@ -1,111 +1,198 @@
-<script>
-  const game = document.getElementById('game');
-  const size = 4;
-  const cellSize = 75 + 6;
-  let grid = Array(size).fill().map(() => Array(size).fill(0));
-  let tiles = [];
-
-  function drawBoard() {
-    game.innerHTML = '';
-
-    for (let i = 0; i < size * size; i++) {
-      const cell = document.createElement('div');
-      cell.className = 'cell';
-      game.appendChild(cell);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>2048 Math Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
     }
 
-    tiles.forEach(t => {
-      const tile = document.createElement('div');
-      tile.className = 'tile';
-      tile.textContent = t.value;
-      tile.dataset.value = t.value;
-      tile.style.transform = `translate(${t.x * cellSize}px, ${t.y * cellSize}px)`;
-      game.appendChild(tile);
-    });
-  }
+    h1 {
+      color: #800000;
+    }
 
-  function addTile() {
-    let empty = [];
-    for (let y = 0; y < size; y++) {
-      for (let x = 0; x < size; x++) {
-        if (grid[y][x] === 0) empty.push({ x, y });
+    #game {
+      position: relative;
+      width: 332px; /* 4 * 75px + 3 * 6px gap */
+      height: 332px;
+      background: #bbada0;
+      border-radius: 10px;
+      display: grid;
+      grid-template-columns: repeat(4, 75px);
+      grid-template-rows: repeat(4, 75px);
+      gap: 6px;
+      padding: 6px;
+      box-sizing: border-box;
+    }
+
+    .cell {
+      background: #ccc0b3;
+      border-radius: 5px;
+      width: 75px;
+      height: 75px;
+    }
+
+    .tile {
+      position: absolute;
+      width: 75px;
+      height: 75px;
+      line-height: 75px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      font-weight: bold;
+      border-radius: 5px;
+      color: #333;
+      transition: transform 0.2s ease;
+    }
+
+    .tile[data-value="2048"] { background: #edc22e; }
+    .tile[data-value="1024"] { background: #edc53f; }
+    .tile[data-value="512"] { background: #f2b179; }
+    .tile[data-value="256"] { background: #f59563; }
+    .tile[data-value="128"] { background: #f67c5f; }
+    .tile[data-value="64"]  { background: #f65e3b; }
+    .tile[data-value="32"]  { background: #ec6544; }
+    .tile[data-value="16"]  { background: #edcf72; }
+    .tile[data-value="8"]   { background: #eee1c9; }
+    .tile[data-value="4"]   { background: #ede0c8; }
+    .tile[data-value="2"]   { background: #eee4da; }
+
+    .back-button {
+      margin-top: 1.5rem;
+      display: inline-block;
+      background-color: #FF6B6B;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: #800000;
+    }
+  </style>
+</head>
+<body>
+  <h1>2048 Math Game</h1>
+  <div id="game"></div>
+
+  <script>
+    const game = document.getElementById('game');
+    const size = 4;
+    const cellSize = 75 + 6;
+    let grid = Array(size).fill().map(() => Array(size).fill(0));
+    let tiles = [];
+
+    function drawBoard() {
+      game.innerHTML = '';
+
+      for (let i = 0; i < size * size; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        game.appendChild(cell);
       }
-    }
-    if (empty.length === 0) return;
 
-    const values = [2048, 1024, 512];
-    let spot = empty[Math.floor(Math.random() * empty.length)];
-    let value = values[Math.floor(Math.random() * values.length)];
-    grid[spot.y][spot.x] = value;
-  }
-
-  function move(dx, dy) {
-    let moved = false;
-    let mergedThisTurn = Array(size).fill().map(() => Array(size).fill(false));
-
-    function inBounds(x, y) {
-      return x >= 0 && x < size && y >= 0 && y < size;
+      tiles.forEach(t => {
+        const tile = document.createElement('div');
+        tile.className = 'tile';
+        tile.textContent = t.value;
+        tile.dataset.value = t.value;
+        tile.style.transform = `translate(${t.x * cellSize}px, ${t.y * cellSize}px)`;
+        game.appendChild(tile);
+      });
     }
 
-    let order = [...Array(size).keys()];
-    if (dx > 0 || dy > 0) order = order.reverse();
+    function addTile(value = 2048) {
+      let empty = [];
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          if (grid[y][x] === 0) empty.push({ x, y });
+        }
+      }
+      if (empty.length === 0) return;
 
-    for (let y of order) {
-      for (let x of order) {
-        let value = grid[y][x];
-        if (value === 0) continue;
+      let spot = empty[Math.floor(Math.random() * empty.length)];
+      grid[spot.y][spot.x] = value;
+      tiles.push({ ...spot, value });
+    }
 
-        let nx = x;
-        let ny = y;
+    function move(dx, dy) {
+      let moved = false;
+      let merged = [];
 
-        while (true) {
-          let nextX = nx + dx;
-          let nextY = ny + dy;
+      let order = [...Array(size).keys()];
+      if (dx > 0 || dy > 0) order = order.reverse();
 
-          if (!inBounds(nextX, nextY)) break;
+      for (let y of order) {
+        for (let x of order) {
+          let value = grid[y][x];
+          if (value === 0) continue;
 
-          if (grid[nextY][nextX] === 0) {
-            grid[nextY][nextX] = grid[ny][nx];
-            grid[ny][nx] = 0;
-            nx = nextX;
-            ny = nextY;
-            moved = true;
-          } else if (
-            grid[nextY][nextX] === value &&
-            !mergedThisTurn[nextY][nextX]
-          ) {
-            grid[nextY][nextX] = value / 2;
-            grid[ny][nx] = 0;
-            mergedThisTurn[nextY][nextX] = true;
-            moved = true;
-            break;
-          } else {
-            break;
+          let nx = x, ny = y;
+          while (true) {
+            let nextX = nx + dx;
+            let nextY = ny + dy;
+            if (
+              nextX < 0 || nextX >= size || nextY < 0 || nextY >= size ||
+              (grid[nextY][nextX] !== 0 && grid[nextY][nextX] !== value) ||
+              merged.find(m => m.x === nextX && m.y === nextY)
+            ) break;
+
+            if (grid[nextY][nextX] === value) {
+              grid[nextY][nextX] *= 0.5;
+              grid[ny][nx] = 0;
+              merged.push({ x: nextX, y: nextY });
+              moved = true;
+              break;
+            }
+
+            if (grid[nextY][nextX] === 0) {
+              grid[nextY][nextX] = grid[ny][nx];
+              grid[ny][nx] = 0;
+              nx = nextX;
+              ny = nextY;
+              moved = true;
+            }
           }
         }
       }
-    }
 
-    if (moved) {
-      tiles = [];
-      for (let y = 0; y < size; y++) {
-        for (let x = 0; x < size; x++) {
-          if (grid[y][x] !== 0) tiles.push({ x, y, value: grid[y][x] });
+      if (moved) {
+        tiles = [];
+        for (let y = 0; y < size; y++) {
+          for (let x = 0; x < size; x++) {
+            if (grid[y][x] !== 0) tiles.push({ x, y, value: grid[y][x] });
+          }
         }
+        addTile();
+        drawBoard();
       }
-      addTile();
-      drawBoard();
     }
-  }
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowUp') move(0, -1);
-    if (e.key === 'ArrowDown') move(0, 1);
-    if (e.key === 'ArrowLeft') move(-1, 0);
-    if (e.key === 'ArrowRight') move(1, 0);
-  });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp') move(0, -1);
+      if (e.key === 'ArrowDown') move(0, 1);
+      if (e.key === 'ArrowLeft') move(-1, 0);
+      if (e.key === 'ArrowRight') move(1, 0);
+    });
 
-  addTile();
-  addTile();
-  drawBoard();
-</script>
+    addTile();
+    addTile();
+    drawBoard();
+  </script>
+
+  <a href="games.html" class="back-button">← Back to Games</a>
+</body>
+</html>
