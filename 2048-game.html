@@ -17,7 +17,6 @@
 
     h1 {
       color: #800000;
-      margin-bottom: 1rem;
     }
 
     #game {
@@ -54,33 +53,35 @@
       font-weight: bold;
       border-radius: 5px;
       color: #333;
-      transition: transform 0.2s ease;
-      z-index: 10;
+      transition: transform 0.15s ease-in-out;
+      z-index: 2;
     }
 
     .tile[data-value="2048"] { background: #edc22e; }
     .tile[data-value="1024"] { background: #edc53f; }
-    .tile[data-value="512"]  { background: #f2b179; }
-    .tile[data-value="256"]  { background: #f59563; }
-    .tile[data-value="128"]  { background: #f67c5f; }
-    .tile[data-value="64"]   { background: #f65e3b; }
-    .tile[data-value="32"]   { background: #ec6544; }
-    .tile[data-value="16"]   { background: #edcf72; }
-    .tile[data-value="8"]    { background: #eee1c9; }
-    .tile[data-value="4"]    { background: #ede0c8; }
-    .tile[data-value="2"]    { background: #eee4da; }
+    .tile[data-value="512"] { background: #f2b179; }
+    .tile[data-value="256"] { background: #f59563; }
+    .tile[data-value="128"] { background: #f67c5f; }
+    .tile[data-value="64"]  { background: #f65e3b; }
+    .tile[data-value="32"]  { background: #ec6544; }
+    .tile[data-value="16"]  { background: #edcf72; }
+    .tile[data-value="8"]   { background: #eee1c9; }
+    .tile[data-value="4"]   { background: #ede0c8; }
+    .tile[data-value="2"]   { background: #eee4da; }
 
-    #controls {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1rem;
+    #game-over {
+      display: none;
+      font-size: 1.4rem;
+      margin-top: 1rem;
+      color: #800000;
     }
 
     button {
-      padding: 10px 16px;
+      margin: 10px 5px;
+      padding: 10px 20px;
       font-size: 1rem;
+      border-radius: 8px;
       border: none;
-      border-radius: 6px;
       background-color: #FF6B6B;
       color: white;
       cursor: pointer;
@@ -90,102 +91,86 @@
     button:hover {
       background-color: #800000;
     }
-
-    #game-over {
-      color: red;
-      font-weight: bold;
-      margin-top: 10px;
-    }
   </style>
 </head>
 <body>
   <h1>2048 Math Game</h1>
   <div id="game"></div>
-
-  <div id="controls">
-    <button onclick="resetGame()">Restart</button>
-    <button onclick="window.location.href='games.html'">Back to Games</button>
-  </div>
-  <div id="game-over"></div>
+  <div id="game-over">Game Over! <button onclick="restartGame()">Restart</button></div>
+  <button onclick="window.location.href='games.html'">Back to Games</button>
 
   <script>
     const game = document.getElementById('game');
-    const gameOverText = document.getElementById('game-over');
     const size = 4;
-    const cellSize = 75 + 6;
+    const cellSize = 81; // 75 + 6
+    let grid = [];
+    let tiles = [];
 
-    let grid, tiles;
-
-    function initGrid() {
+    function setupGrid() {
       grid = Array(size).fill().map(() => Array(size).fill(0));
       tiles = [];
-      addTile(); addTile();
-      drawBoard();
-    }
-
-    function drawBoard() {
       game.innerHTML = '';
       for (let i = 0; i < size * size; i++) {
         const cell = document.createElement('div');
         cell.className = 'cell';
         game.appendChild(cell);
       }
+    }
+
+    function drawTiles() {
+      document.querySelectorAll('.tile').forEach(t => t.remove());
 
       tiles.forEach(t => {
-        const tile = document.createElement('div');
-        tile.className = 'tile';
-        tile.textContent = t.value;
-        tile.dataset.value = t.value;
-        const tx = t.x * cellSize;
-        const ty = t.y * cellSize;
-        tile.style.transform = `translate(${tx}px, ${ty}px)`;
-        game.appendChild(tile);
+        const div = document.createElement('div');
+        div.className = 'tile';
+        div.textContent = t.value;
+        div.dataset.value = t.value;
+        div.style.transform = `translate(${t.x * cellSize}px, ${t.y * cellSize}px)`;
+        game.appendChild(div);
       });
     }
 
     function addTile(value = 2048) {
       let empty = [];
-      for (let y = 0; y < size; y++)
-        for (let x = 0; x < size; x++)
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
           if (grid[y][x] === 0) empty.push({ x, y });
-
+        }
+      }
       if (empty.length === 0) return;
-
       let spot = empty[Math.floor(Math.random() * empty.length)];
       grid[spot.y][spot.x] = value;
-      tiles.push({ x: spot.x, y: spot.y, px: spot.x, py: spot.y, value });
     }
 
     function move(dx, dy) {
       let moved = false;
-      let merged = [];
-      let order = [...Array(size).keys()];
-      if (dx > 0 || dy > 0) order = order.reverse();
+      let merged = Array(size).fill().map(() => Array(size).fill(false));
 
-      for (let y of order) {
-        for (let x of order) {
+      const range = [...Array(size).keys()];
+      const yRange = dy > 0 ? range.slice().reverse() : range;
+      const xRange = dx > 0 ? range.slice().reverse() : range;
+
+      for (let y of yRange) {
+        for (let x of xRange) {
           let value = grid[y][x];
           if (value === 0) continue;
-
           let nx = x, ny = y;
+
           while (true) {
             let nextX = nx + dx;
             let nextY = ny + dy;
             if (
               nextX < 0 || nextX >= size || nextY < 0 || nextY >= size ||
-              (grid[nextY][nextX] !== 0 && grid[nextY][nextX] !== value) ||
-              merged.find(m => m.x === nextX && m.y === nextY)
+              (grid[nextY][nextX] !== 0 && (grid[nextY][nextX] !== value || merged[nextY][nextX]))
             ) break;
 
             if (grid[nextY][nextX] === value) {
               grid[nextY][nextX] *= 0.5;
               grid[ny][nx] = 0;
-              merged.push({ x: nextX, y: nextY });
+              merged[nextY][nextX] = true;
               moved = true;
               break;
-            }
-
-            if (grid[nextY][nextX] === 0) {
+            } else if (grid[nextY][nextX] === 0) {
               grid[nextY][nextX] = grid[ny][nx];
               grid[ny][nx] = 0;
               nx = nextX;
@@ -198,51 +183,28 @@
 
       if (moved) {
         updateTiles();
-        animateTiles(() => {
-          addTile();
-          drawBoard();
-          if (checkGameOver()) {
-            gameOverText.textContent = "Game Over!";
+        addTile();
+        drawTiles();
+        setTimeout(() => {
+          if (isGameOver()) {
+            document.getElementById('game-over').style.display = 'block';
           }
-        });
+        }, 200);
       }
     }
 
     function updateTiles() {
-      const newTiles = [];
+      tiles = [];
       for (let y = 0; y < size; y++) {
         for (let x = 0; x < size; x++) {
           if (grid[y][x] !== 0) {
-            const existing = tiles.find(t => t.value === grid[y][x] && t.x === x && t.y === y);
-            newTiles.push({
-              value: grid[y][x],
-              px: existing?.x ?? x,
-              py: existing?.y ?? y,
-              x, y
-            });
+            tiles.push({ x, y, value: grid[y][x] });
           }
         }
       }
-      tiles = newTiles;
     }
 
-    function animateTiles(callback) {
-      drawBoard();
-      requestAnimationFrame(() => {
-        tiles.forEach(t => {
-          const tile = document.querySelector(
-            `.tile[data-value="${t.value}"]:not(.merged)`
-          );
-          if (tile) {
-            tile.style.transform = `translate(${t.x * cellSize}px, ${t.y * cellSize}px)`;
-          }
-        });
-
-        setTimeout(callback, 200);
-      });
-    }
-
-    function checkGameOver() {
+    function isGameOver() {
       for (let y = 0; y < size; y++) {
         for (let x = 0; x < size; x++) {
           if (grid[y][x] === 0) return false;
@@ -253,20 +215,24 @@
       return true;
     }
 
-    function resetGame() {
-      gameOverText.textContent = '';
-      initGrid();
+    function restartGame() {
+      document.getElementById('game-over').style.display = 'none';
+      setupGrid();
+      addTile();
+      addTile();
+      updateTiles();
+      drawTiles();
     }
 
     document.addEventListener('keydown', (e) => {
-      if (gameOverText.textContent) return;
       if (e.key === 'ArrowUp') move(0, -1);
       if (e.key === 'ArrowDown') move(0, 1);
       if (e.key === 'ArrowLeft') move(-1, 0);
       if (e.key === 'ArrowRight') move(1, 0);
     });
 
-    initGrid();
+    // Init game
+    restartGame();
   </script>
 </body>
 </html>
