@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Equation Solver</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      color: #800000;
+    }
+
+    input, button {
+      padding: 10px;
+      font-size: 1rem;
+      margin: 10px;
+      width: 300px;
+      max-width: 90%;
+    }
+
+    button {
+      background-color: #800000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #a00000;
+    }
+
+    #output {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    #back {
+      margin-top: 30px;
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #aaa;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    #back:hover {
+      background-color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>Equation Solver</h1>
+  <input type="text" id="equation" placeholder="e.g. 2x + 5 = 11" />
+  <br>
+  <button onclick="solveEquation()">Solve</button>
+
+  <div id="output"></div>
+
+  <a href="games.html" id="back">Back to Games</a>
+
+  <script>
+    function solveEquation() {
+      const eq = document.getElementById("equation").value;
+      const output = document.getElementById("output");
+
+      try {
+        let result;
+
+        if (/x\^2/.test(eq)) {
+          // Quadratic
+          const match = eq.match(/([+-]?\d*)x\^2\s*([+-]\s*\d*)x\s*([+-]?\s*\d+)\s*=\s*0/);
+          if (match) {
+            let a = parseFloat(match[1] || "1");
+            let b = parseFloat(match[2].replace(/\s/g, "") || "0");
+            let c = parseFloat(match[3].replace(/\s/g, "") || "0");
+            const discriminant = b * b - 4 * a * c;
+            if (discriminant < 0) {
+              result = "No real solutions.";
+            } else {
+              const x1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+              const x2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+              result = `Quadratic detected. Solutions:<br>x = ${x1.toFixed(2)}, x = ${x2.toFixed(2)}`;
+            }
+          } else {
+            result = "Unsupported quadratic format.";
+          }
+        } else if (/e\^/.test(eq)) {
+          // Exponential
+          const match = eq.match(/e\^([a-z])\s*=\s*(\d+)/i);
+          if (match) {
+            const variable = match[1];
+            const rhs = parseFloat(match[2]);
+            const x = Math.log(rhs);
+            result = `Exponential detected. Solution:<br>${variable} = ln(${rhs}) = ${x.toFixed(4)}`;
+          } else {
+            result = "Unsupported exponential format.";
+          }
+        } else if (/x/.test(eq)) {
+          // Linear
+          const match = eq.match(/([+-]?\d*)x\s*([+-]\s*\d+)?\s*=\s*(-?\d+)/);
+          if (match) {
+            let a = parseFloat(match[1] || "1");
+            let b = parseFloat(match[2]?.replace(/\s/g, "") || "0");
+            let c = parseFloat(match[3]);
+            let x = (c - b) / a;
+            result = `Linear equation detected.<br>x = (${c} - ${b}) / ${a} = ${x}`;
+          } else {
+            result = "Unsupported linear format.";
+          }
+        } else {
+          result = "Equation format not recognized.";
+        }
+
+        output.innerHTML = result;
+      } catch (err) {
+        output.textContent = "Error solving equation.";
+      }
+    }
+  </script>
+</body>
+</html>
