@@ -25,14 +25,12 @@
       color: #FF6B6B;
       text-decoration: none;
       font-size: 0.95rem;
-      border: 1.5px solid transparent;
       padding: 4px 10px;
       border-radius: 4px;
       transition: 0.3s;
     }
 
     nav a:hover {
-      border-color: #FF6B6B;
       background-color: #FF6B6B10;
     }
 
@@ -48,83 +46,72 @@
       color: #800000;
     }
 
-    .subtitle {
-      font-size: 1rem;
-      color: #444444;
-    }
-
     main {
       padding: 1.5rem 1rem;
       max-width: 900px;
       margin: auto;
     }
 
-    .category {
-      margin-top: 1.5rem;
-    }
-
-    .category h2 {
-      font-size: 1.3rem;
-      color: #444444;
-      border-bottom: 2px solid #800000;
-      padding-bottom: 0.3rem;
-      margin-bottom: 0.8rem;
-      cursor: pointer;
-    }
-
-    .vocab-list {
-      display: none;
-    }
-
-    .vocab-item {
-      background: #ffffff;
-      border-left: 4px solid #FF6B6B;
-      padding: 0.6rem 0.8rem;
+    details {
       margin: 0.5rem 0;
+      padding: 0.6rem;
+      background: #fff;
+      border-left: 4px solid #FF6B6B;
       border-radius: 6px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     }
 
-    .vocab-item h3 {
-      margin: 0 0 0.2rem;
-      color: #800000;
+    summary {
       font-size: 1rem;
+      font-weight: 500;
+      color: #800000;
+      cursor: pointer;
     }
 
-    .vocab-item p {
-      margin: 0;
-      color: #333;
+    p {
+      margin: 0.5rem 0 0;
       font-size: 0.9rem;
+      color: #333;
     }
   </style>
-  <script>
-    function toggleCategory(id) {
-      const list = document.getElementById(id);
-      list.style.display = list.style.display === 'none' ? 'block' : 'none';
-    }
-  </script>
 </head>
 <body>
   <nav>
-    <a href="index.html" class="nav-button">Home</a>
-    <a href="lessons.html" class="nav-button">Math Lessons</a>
-    <a href="MathVocabulary.html" class="nav-button">Math Vocabulary</a>
+    <a href="index.html">Home</a>
+    <a href="lessons.html">Math Lessons</a>
+    <a href="MathVocabulary.html">Math Vocabulary</a>
   </nav>
 
   <header>
     <h1>Math Vocabulary</h1>
-    <p class="subtitle">Key algebra terms to boost your understanding</p>
+    <p>Key algebra terms to boost your understanding</p>
   </header>
 
   <main>
-    <div class="category" onclick="toggleCategory('expressions')">
-      <h2>Expressions & Equations</h2>
-      <div id="expressions" class="vocab-list">
-        <div class="vocab-item"><h3>Variable</h3><p>A symbol that represents a number.</p></div>
-        <div class="vocab-item"><h3>Expression</h3><p>Combination of numbers, variables, and operations.</p></div>
-        <div class="vocab-item"><h3>Equation</h3><p>A statement showing two expressions are equal.</p></div>
-      </div>
-    </div>
+    <details>
+      <summary>Variable</summary>
+      <p>A symbol that represents a number.</p>
+    </details>
+    <details>
+      <summary>Expression</summary>
+      <p>Combination of numbers, variables, and operations.</p>
+    </details>
+    <details>
+      <summary>Equation</summary>
+      <p>A statement showing two expressions are equal.</p>
+    </details>
+    <details>
+      <summary>Term</summary>
+      <p>Part of an expression separated by + or - signs.</p>
+    </details>
+    <details>
+      <summary>Coefficient</summary>
+      <p>The number multiplying a variable.</p>
+    </details>
+    <details>
+      <summary>Constant</summary>
+      <p>A value that does not change.</p>
+    </details>
   </main>
 </body>
 </html>
