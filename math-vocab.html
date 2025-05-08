@@ -69,6 +69,11 @@
       border-bottom: 2px solid #800000;
       padding-bottom: 0.3rem;
       margin-bottom: 0.8rem;
+      cursor: pointer;
+    }
+
+    .vocab-list {
+      display: none;
     }
 
     .vocab-item {
@@ -91,26 +96,13 @@
       color: #333;
       font-size: 0.9rem;
     }
-
-    .nav-button {
-      color: #800000;
-      background-color: #FF6B6B;
-      text-decoration: none;
-      font-size: 0.95rem;
-      border: 1.5px solid #FF6B6B;
-      padding: 5px 12px;
-      border-radius: 6px;
-      transition: 0.3s;
-      display: inline-block;
-      margin-top: 1rem;
-    }
-
-    .nav-button:hover {
-      background-color: #800000;
-      color: #FF6B6B;
-      border-color: #800000;
-    }
   </style>
+  <script>
+    function toggleCategory(id) {
+      const list = document.getElementById(id);
+      list.style.display = list.style.display === 'none' ? 'block' : 'none';
+    }
+  </script>
 </head>
 <body>
   <nav>
@@ -125,77 +117,13 @@
   </header>
 
   <main>
-
-    <div class="category">
+    <div class="category" onclick="toggleCategory('expressions')">
       <h2>Expressions & Equations</h2>
-      <div class="vocab-item"><h3>Variable</h3><p>A symbol that represents a number.</p></div>
-      <div class="vocab-item"><h3>Expression</h3><p>Combination of numbers, variables, and operations.</p></div>
-      <div class="vocab-item"><h3>Equation</h3><p>A statement showing two expressions are equal.</p></div>
-      <div class="vocab-item"><h3>Term</h3><p>Part of an expression separated by + or - signs.</p></div>
-      <div class="vocab-item"><h3>Coefficient</h3><p>The number multiplying a variable.</p></div>
-      <div class="vocab-item"><h3>Constant</h3><p>A value that does not change.</p></div>
-    </div>
-
-    <div class="category">
-      <h2>Operations & Properties</h2>
-      <div class="vocab-item"><h3>Distributive Property</h3><p>a(b + c) = ab + ac.</p></div>
-      <div class="vocab-item"><h3>Inverse Operation</h3><p>Operations that undo each other.</p></div>
-      <div class="vocab-item"><h3>Simplify</h3><p>Reduce an expression to its simplest form.</p></div>
-      <div class="vocab-item"><h3>Evaluate</h3><p>Find the value of an expression.</p></div>
-    </div>
-
-    <div class="category">
-      <h2>Exponents & Roots</h2>
-      <div class="vocab-item"><h3>Exponent</h3><p>Shows how many times a base is multiplied.</p></div>
-      <div class="vocab-item"><h3>Base</h3><p>The number used in repeated multiplication.</p></div>
-      <div class="vocab-item"><h3>Exponent Rules</h3><p>Guidelines to simplify powers.</p></div>
-      <div class="vocab-item"><h3>Radical</h3><p>An expression with a root symbol.</p></div>
-      <div class="vocab-item"><h3>Square Root</h3><p>Value that gives the original number when squared.</p></div>
-    </div>
-
-    <div class="category">
-      <h2>Functions & Graphing</h2>
-      <div class="vocab-item"><h3>Function</h3><p>Each input has one output.</p></div>
-      <div class="vocab-item"><h3>Domain</h3><p>All possible input values.</p></div>
-      <div class="vocab-item"><h3>Range</h3><p>All possible output values.</p></div>
-      <div class="vocab-item"><h3>Slope</h3><p>Steepness of a line (rise/run).</p></div>
-      <div class="vocab-item"><h3>Y-Intercept</h3><p>Where the graph crosses the y-axis.</p></div>
-      <div class="vocab-item"><h3>X-Intercept</h3><p>Where the graph crosses the x-axis.</p></div>
-    </div>
-
-    <div class="category">
-      <h2>Equations & Inequalities</h2>
-      <div class="vocab-item"><h3>Linear Equation</h3><p>Graphs a straight line.</p></div>
-      <div class="vocab-item"><h3>Quadratic Equation</h3><p>Has the form ax² + bx + c = 0.</p></div>
-      <div class="vocab-item"><h3>Inequality</h3><p>Compares values using <, >, ≤, ≥.</p></div>
-      <div class="vocab-item"><h3>Solution</h3><p>Value(s) that make an equation true.</p></div>
-    </div>
-
-    <div class="category">
-      <h2>Number Types</h2>
-      <div class="vocab-item"><h3>Integer</h3><p>All whole numbers and their opposites.</p></div>
-      <div class="vocab-item"><h3>Natural Numbers</h3><p>Counting numbers starting at 1.</p></div>
-      <div class="vocab-item"><h3>Whole Numbers</h3><p>Natural numbers including 0.</p></div>
-      <div class="vocab-item"><h3>Rational Number</h3><p>Can be expressed as a fraction.</p></div>
-      <div class="vocab-item"><h3>Irrational Number</h3><p>Cannot be expressed as a fraction.</p></div>
-      <div class="vocab-item"><h3>Real Numbers</h3><p>All rational and irrational numbers.</p></div>
-    </div>
-
-    <div class="category">
-      <h2>Additional Terms</h2>
-      <div class="vocab-item"><h3>Graph</h3><p>Visual representation of data.</p></div>
-      <div class="vocab-item"><h3>System of Equations</h3><p>Multiple equations with same variables.</p></div>
-      <div class="vocab-item"><h3>Substitution</h3><p>Replace a variable with a value.</p></div>
-      <div class="vocab-item"><h3>Elimination</h3><p>Add/subtract equations to eliminate a variable.</p></div>
-      <div class="vocab-item"><h3>Standard Form</h3><p>Written as Ax + By = C.</p></div>
-      <div class="vocab-item"><h3>Factor</h3><p>Numbers/expressions multiplied to get a product.</p></div>
-      <div class="vocab-item"><h3>GCF</h3><p>Greatest factor shared by terms.</p></div>
-      <div class="vocab-item"><h3>LCM</h3><p>Smallest multiple two numbers share.</p></div>
-      <div class="vocab-item"><h3>Order of Operations</h3><p>PEMDAS: evaluate in proper sequence.</p></div>
-    </div>
-
-    <div style="text-align: center; margin-top: 2rem;">
-      <a href="index.html" class="nav-button">🏠 Back to Home</a>
+      <div id="expressions" class="vocab-list">
+        <div class="vocab-item"><h3>Variable</h3><p>A symbol that represents a number.</p></div>
+        <div class="vocab-item"><h3>Expression</h3><p>Combination of numbers, variables, and operations.</p></div>
+        <div class="vocab-item"><h3>Equation</h3><p>A statement showing two expressions are equal.</p></div>
+      </div>
     </div>
   </main>
 </body>
