@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Math Games - InfinityLabs</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Lora:wght@700&display=swap" rel="stylesheet">
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
   <style>
     body {
       font-family: 'Roboto', sans-serif;
@@ -21,7 +25,7 @@
     }
 
     nav a {
-      color: #FF6B6B; /* Light Red */
+      color: #FF6B6B;
       text-decoration: none;
       font-size: 1.1rem;
       border: 2px solid transparent;
@@ -31,8 +35,8 @@
     }
 
     nav a:hover {
-      border-color: #FF6B6B; /* Light Red */
-      background-color: #FF6B6B10; /* Transparent Light Red */
+      border-color: #FF6B6B;
+      background-color: #FF6B6B10;
     }
 
     header {
@@ -42,12 +46,12 @@
 
     h1 {
       font-family: 'Lora', serif;
-      font-size: 3rem;
+      font-size: 2.5rem;
       margin-bottom: 0.5rem;
     }
 
     .subtitle {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       color: #444444;
     }
 
@@ -56,52 +60,43 @@
       padding: 2rem 1rem;
     }
 
-    .card {
+    .game-box {
       background: #ffffff;
-      border-left: 6px solid #FF6B6B; /* Light Red */
-      padding: 1.5rem;
-      margin: 1rem auto;
+      border-left: 6px solid #FF6B6B;
+      padding: 2rem;
+      margin: 2rem auto;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
-      transition: transform 0.3s ease;
+      max-width: 500px;
     }
 
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    .nav-button {
-      color: #800000;
-      background-color: #FF6B6B; /* Light Red */
-      text-decoration: none;
+    input, select {
+      padding: 8px;
       font-size: 1.1rem;
-      border: 2px solid #FF6B6B; /* Light Red */
-      padding: 8px 16px;
-      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 10px 16px;
+      font-size: 1rem;
+      border: none;
+      background-color: #FF6B6B;
+      color: #800000;
+      font-weight: bold;
+      border-radius: 6px;
+      margin-top: 10px;
+      cursor: pointer;
       transition: 0.3s;
-      display: inline-block;
-      margin-top: 1rem;
     }
 
-    .nav-button:hover {
+    button:hover {
       background-color: #800000;
-      color: #FF6B6B; /* Light Red */
-      border-color: #800000;
+      color: #FF6B6B;
     }
 
-    .container {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    @media only screen and (max-width: 600px) {
-      .container {
-        flex-direction: column;
-        align-items: center;
-      }
+    .feedback {
+      margin-top: 1rem;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -110,34 +105,96 @@
     <a href="index.html" class="nav-button">Home</a>
     <a href="lessons.html" class="nav-button">Math Lessons</a>
     <a href="math-vocab.html" class="nav-button">Math Vocabulary</a>
-    <a href="games.html" class="nav-button">Math Games</a>
   </nav>
 
   <header>
-    <h1>Math Games</h1>
-    <p class="subtitle">Engage with interactive games to improve your math skills!</p>
+    <h1>Quiz Yourself!</h1>
+    <p class="subtitle">Test your skills with fun math challenges!</p>
   </header>
 
   <main>
-    <div class="container">
-      <div class="card">
-        <h2>2048 Math Game</h2>
-        <p>Play a modified version of the 2048 game, with math challenges at every move!</p>
-        <a href="2048-game.html" class="nav-button">Play Now</a>
-      </div>
+    <div class="game-box">
+      <h2>Select a Unit</h2>
+      <select id="unitSelect" onchange="generateQuestion()">
+        <option value="1-8">Unit 1 & 8: Linear & Geometry</option>
+        <option value="2-3">Unit 2 & 3: Inequalities & Radicals</option>
+        <option value="4">Unit 4: Quadratics</option>
+        <option value="5-6">Unit 5 & 6: Exponentials</option>
+        <option value="7">Unit 7: Statistics</option>
+      </select>
 
-      <div class="card">
-        <h2>Equation Solver</h2>
-        <p>Solve different types of equations and improve your problem-solving skills.</p>
-        <a href="equation-solver.html" class="nav-button">Start Solving</a>
-      </div>
-
-      <div class="card">
-        <h2>Math Shooter</h2>
-        <p>Shoot the correct answers to solve math problems and boost your score!</p>
-        <a href="math-shooter.html" class="nav-button">Play Shooter</a>
-      </div>
+      <p id="question">Loading...</p>
+      <input type="text" id="answer" placeholder="Your answer" />
+      <br>
+      <button onclick="checkAnswer()">Submit</button>
+      <button onclick="generateQuestion()">Skip</button>
+      <p class="feedback" id="feedback"></p>
     </div>
   </main>
+
+  <script>
+    let correctAnswer = "";
+
+    function generateQuestion() {
+      const unit = document.getElementById("unitSelect").value;
+      let question = "";
+
+      if (unit === "1-8") {
+        const m = Math.floor(Math.random() * 5) + 1;
+        const b = Math.floor(Math.random() * 10) - 5;
+        correctAnswer = `y = ${m}x + ${b}`;
+        question = `Write the slope-intercept form of a line with slope ${m} and y-intercept ${b}.`;
+      } else if (unit === "2-3") {
+        const radicand = Math.floor(Math.random() * 50) + 1;
+        correctAnswer = Math.sqrt(radicand).toFixed(2);
+        question = `What is the square root of ${radicand} rounded to 2 decimal places?`;
+      } else if (unit === "4") {
+        const a = 1, b = -4, c = 3;
+        const discriminant = b * b - 4 * a * c;
+        const root1 = ((-b + Math.sqrt(discriminant)) / (2 * a)).toFixed(2);
+        const root2 = ((-b - Math.sqrt(discriminant)) / (2 * a)).toFixed(2);
+        correctAnswer = `${root1}, ${root2}`;
+        question = `Solve: \\(x^2 - 4x + 3 = 0\\). Enter both roots separated by a comma.`;
+      } else if (unit === "5-6") {
+        const base = 2;
+        const exp = Math.floor(Math.random() * 5) + 1;
+        correctAnswer = Math.pow(base, exp).toString();
+        question = `What is \\(${base}^${exp}\\)?`;
+      } else if (unit === "7") {
+        const data = Array.from({ length: 5 }, () => Math.floor(Math.random() * 20) + 1);
+        const mean = data.reduce((a, b) => a + b, 0) / data.length;
+        correctAnswer = mean.toFixed(2);
+        question = `What is the mean of this data set: ${data.join(", ")}?`;
+      }
+
+      document.getElementById("question").textContent = question;
+      document.getElementById("answer").value = '';
+      document.getElementById("feedback").textContent = '';
+      MathJax.typeset(); // Render equations
+    }
+
+    function checkAnswer() {
+      const userAnswer = document.getElementById("answer").value.trim();
+      const feedback = document.getElementById("feedback");
+
+      if (userAnswer === "") {
+        feedback.textContent = "Please enter an answer before submitting.";
+        feedback.style.color = "orange";
+        return;
+      }
+
+      if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+        feedback.textContent = "Correct! Great job!";
+        feedback.style.color = "green";
+      } else {
+        feedback.textContent = `Oops! The correct answer was ${correctAnswer}.`;
+        feedback.style.color = "red";
+      }
+
+      setTimeout(generateQuestion, 3000);
+    }
+
+    window.onload = generateQuestion;
+  </script>
 </body>
 </html>
