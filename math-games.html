@@ -6,6 +6,7 @@
   <title>Math Games - InfinityLabs</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Lora:wght@700&display=swap" rel="stylesheet">
   <style>
+    /* Use same styles as homepage for consistency */
     body {
       font-family: 'Roboto', sans-serif;
       background: linear-gradient(to bottom right, #f0f0f0, #d3d3d3);
@@ -17,32 +18,32 @@
       background-color: #800000;
       padding: 1rem 2rem;
       display: flex;
-      gap: 20px;
+      justify-content: center;
+      gap: 30px;
     }
 
     nav a {
       color: #FF6B6B;
       text-decoration: none;
       font-size: 1.1rem;
-      border: 2px solid transparent;
-      padding: 6px 12px;
-      border-radius: 4px;
+      padding: 8px 20px;
+      border-radius: 5px;
       transition: 0.3s;
     }
 
     nav a:hover {
-      border-color: #FF6B6B;
-      background-color: #FF6B6B10;
+      background-color: #FF6B6B;
+      color: #800000;
     }
 
     header {
       text-align: center;
-      padding: 3rem 1rem 1rem;
+      padding: 2rem 1rem;
     }
 
     h1 {
       font-family: 'Lora', serif;
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       margin-bottom: 0.5rem;
     }
 
@@ -51,138 +52,77 @@
       color: #444444;
     }
 
-    main {
-      text-align: center;
-      padding: 2rem 1rem;
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 2rem;
     }
 
-    .game-box {
+    .card {
       background: #ffffff;
       border-left: 6px solid #FF6B6B;
       padding: 2rem;
-      margin: 2rem auto;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      max-width: 500px;
-    }
-
-    input, select {
-      padding: 8px;
-      font-size: 1.1rem;
-      margin-top: 10px;
-    }
-
-    button {
-      padding: 10px 16px;
-      font-size: 1rem;
-      border: none;
-      background-color: #FF6B6B;
-      color: #800000;
-      font-weight: bold;
-      border-radius: 6px;
-      margin-top: 10px;
-      cursor: pointer;
+      max-width: 300px;
+      text-align: center;
       transition: 0.3s;
     }
 
-    button:hover {
-      background-color: #800000;
-      color: #FF6B6B;
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
     }
 
-    .feedback {
-      margin-top: 1rem;
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .card a {
+      background-color: #FF6B6B;
+      color: #800000;
+      padding: 10px 16px;
+      text-decoration: none;
+      border-radius: 6px;
       font-weight: bold;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .card a:hover {
+      background-color: #800000;
+      color: #FF6B6B;
     }
   </style>
 </head>
 <body>
   <nav>
-    <a href="index.html" class="nav-button">Home</a>
-    <a href="lessons.html" class="nav-button">Math Lessons</a>
-    <a href="math-vocab.html" class="nav-button">Math Vocabulary</a>
+    <a href="index.html">Home</a>
+    <a href="lessons.html">Math Lessons</a>
+    <a href="math-vocab.html">Math Vocabulary</a>
+    <a href="games.html">Math Games</a>
   </nav>
 
   <header>
-    <h1>Quiz your self!</h1>
-    <p class="subtitle">Test your skills with fun math challenges!</p>
+    <h1>Math Games Hub</h1>
+    <p class="subtitle">Choose a game to sharpen your skills!</p>
   </header>
 
-  <main>
-    <div class="game-box">
-      <h2>Select a Unit</h2>
-      <select id="unitSelect" onchange="generateQuestion()">
-        <option value="1-8">Unit 1 & 8: Linear & Geometry</option>
-        <option value="2-3">Unit 2 & 3: Inequalities & Radicals</option>
-        <option value="4">Unit 4: Quadratics</option>
-        <option value="5-6">Unit 5 & 6: Exponentials</option>
-        <option value="7">Unit 7: Statistics</option>
-      </select>
-
-      <p id="question">Loading...</p>
-      <input type="text" id="answer" placeholder="Your answer" />
-      <br>
-      <button onclick="checkAnswer()">Submit</button>
-      <p class="feedback" id="feedback"></p>
+  <main class="container">
+    <div class="card">
+      <h2>Quiz Yourself</h2>
+      <p>Test yourself on algebra, geometry, and more!</p>
+      <a href="math-quiz.html">Play Quiz</a>
     </div>
+    <div class="card">
+      <h2>2048 Reverse</h2>
+      <p>Combine numbers backwards to reach 1!</p>
+      <a href="2048-game.html">Play 2048</a>
+    </div>
+    <!-- Add more games as you build them -->
   </main>
-
-  <script>
-    let correctAnswer = "";
-
-    function generateQuestion() {
-      const unit = document.getElementById("unitSelect").value;
-      let question = "";
-
-      if (unit === "1-8") {
-        const m = Math.floor(Math.random() * 5) + 1;
-        const b = Math.floor(Math.random() * 10) - 5;
-        correctAnswer = `y = ${m}x + ${b}`;
-        question = `Write the slope-intercept form of a line with slope ${m} and y-intercept ${b}.`;
-      } else if (unit === "2-3") {
-        const radicand = Math.floor(Math.random() * 50) + 1;
-        correctAnswer = Math.sqrt(radicand).toFixed(2);
-        question = `What is the square root of ${radicand} rounded to 2 decimal places?`;
-      } else if (unit === "4") {
-        const a = 1;
-        const b = -4;
-        const c = 3;
-        const discriminant = b * b - 4 * a * c;
-        const root1 = ((-b + Math.sqrt(discriminant)) / (2 * a)).toFixed(2);
-        const root2 = ((-b - Math.sqrt(discriminant)) / (2 * a)).toFixed(2);
-        correctAnswer = `${root1}, ${root2}`;
-        question = `Solve: x² - 4x + 3 = 0. Enter both roots separated by a comma.`;
-      } else if (unit === "5-6") {
-        const base = 2;
-        const exp = Math.floor(Math.random() * 5) + 1;
-        correctAnswer = Math.pow(base, exp).toString();
-        question = `What is ${base}^${exp}?`;
-      } else if (unit === "7") {
-        const data = [3, 5, 7, 9, 11];
-        const mean = data.reduce((a, b) => a + b, 0) / data.length;
-        correctAnswer = mean.toFixed(2);
-        question = `What is the mean of this data set: ${data.join(", ")}?`;
-      }
-
-      document.getElementById("question").textContent = question;
-      document.getElementById("answer").value = '';
-      document.getElementById("feedback").textContent = '';
-    }
-
-    function checkAnswer() {
-      const userAnswer = document.getElementById("answer").value.trim();
-      const feedback = document.getElementById("feedback");
-      if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
-        feedback.textContent = "Correct! Great job!";
-        feedback.style.color = "green";
-      } else {
-        feedback.textContent = `Oops! The correct answer was ${correctAnswer}.`;
-        feedback.style.color = "red";
-      }
-      setTimeout(generateQuestion, 3000);
-    }
-
-    window.onload = generateQuestion;
-  </script>
 </body>
 </html>
